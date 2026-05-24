@@ -1086,7 +1086,7 @@ html { scroll-snap-type: y proximity; }
 	<!-- ============================================================
 	     TOOL C · 色彩疗愈
 	     ============================================================ -->
-	<section class="tool-section" id="healing">
+	<section class="tool-section realtime-section" id="healing">
 	  <h2 class="tool-section-title" data-delay="0">色彩疗愈</h2>
 	  <p class="tool-section-sub" data-delay="0.1">Color Healing</p>
 	  <div class="realtime-card">
@@ -2077,7 +2077,7 @@ var sectionObserver = new IntersectionObserver(function(entries) {
   });
 }, { threshold: 0.15 });
 
-['scheme', 'contrast', 'extraction', 'matching', 'export', 'realtime'].forEach(function(id) {
+['scheme', 'contrast', 'extraction', 'matching', 'export', 'realtime', 'healing'].forEach(function(id) {
   var el = document.getElementById(id);
   if (el) sectionObserver.observe(el);
 });
