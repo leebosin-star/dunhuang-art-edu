@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>敦煌色彩美育</title>
+  </head>
+  <body>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (function(){
+        var dot = document.getElementById('cursorDot');
+        var ring = document.getElementById('cursorRing');
+        if (!dot || !ring) return;
+        var mX = 0, mY = 0;
+        function onMove(e) {
+          mX = e.clientX; mY = e.clientY;
+          dot.style.left = ring.style.left = mX + 'px';
+          dot.style.top = ring.style.top = mY + 'px';
+          if (!dot.classList.contains('visible')) {
+            dot.classList.add('visible');
+            ring.classList.add('visible');
+          }
+        }
+        function onDown() { dot.classList.add('clicking'); }
+        function onUp() { dot.classList.remove('clicking'); }
+        function onEnter() { ring.classList.add('hover'); }
+        function onLeave() { ring.classList.remove('hover'); }
+        document.addEventListener('mousemove', onMove, { passive: true });
+        document.addEventListener('mousedown', onDown);
+        document.addEventListener('mouseup', onUp);
+        document.querySelectorAll('a, button, [role="button"], input, select, textarea').forEach(function(el) {
+          el.addEventListener('mouseenter', onEnter);
+          el.addEventListener('mouseleave', onLeave);
+        });
+      })();
+    </script>
+  </body>
+</html>

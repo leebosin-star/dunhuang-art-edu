@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DHP · 美育课程</title>
+<meta name="description" content="敦煌美育色彩系统 — 让千年色彩走进中小学课堂">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+SC:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<style>
+/* ============================================================
+   DHP · 美育课程 — 板块主页
+   ============================================================ */
+
+html { scroll-behavior:smooth; }
+
+/* ---- Section shared ---- */
+.edu-section {
+  min-height:100vh; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:120px 48px;
+}
+.edu-section-label {
+  font-size:0.58rem; letter-spacing:0.2em; color:rgba(201,160,132,0.4);
+  margin-bottom:16px; text-transform:uppercase;
+}
+.edu-section-title {
+  font-size:clamp(1.3rem,2.2vw,1.7rem); font-weight:400;
+  letter-spacing:0.08em; color:rgba(249,245,235,0.75);
+  margin-bottom:12px; text-align:center;
+}
+.edu-section-sub {
+  font-size:0.68rem; color:rgba(249,245,235,0.22);
+  letter-spacing:0.06em; text-align:center; max-width:560px;
+  line-height:1.8; margin-bottom:56px;
+}
+
+/* ---- 1. Hero — 板块总览 ---- */
+.edu-hero {
+  height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  position:relative; overflow:hidden; background:#0a0807;
+}
+.edu-hero-bg {
+  position:absolute; inset:0;
+  background:url(assets/education/莫高窟第45窟.png) center/cover no-repeat;
+  opacity:0.22; filter:saturate(0.4) brightness(0.7);
+}
+.edu-hero-overlay {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at center, transparent 20%, rgba(10,8,7,0.92) 100%);
+}
+.edu-hero-content { position:relative; z-index:1; text-align:center; padding:0 24px; }
+.edu-hero-title {
+  font-size:clamp(1.8rem,4vw,3rem); font-weight:300;
+  letter-spacing:0.1em; color:rgba(249,245,235,0.85);
+  line-height:1.5; margin-bottom:18px;
+}
+.edu-hero-sub {
+  font-size:clamp(0.68rem,0.95vw,0.8rem); color:rgba(249,245,235,0.25);
+  letter-spacing:0.06em; line-height:1.8; max-width:560px; margin:0 auto 36px;
+}
+.edu-hero-tags { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.edu-hero-tag {
+  font-size:0.58rem; letter-spacing:0.1em; color:rgba(201,189,164,0.3);
+  padding:5px 14px; border-radius:20px;
+  border:1px solid rgba(201,189,164,0.1);
+  background:rgba(201,189,164,0.02);
+}
+.edu-hero-scroll {
+  position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
+  z-index:1; display:flex; flex-direction:column; align-items:center; gap:8px;
+  opacity:0; transition:opacity 0.8s ease 1.5s;
+}
+.edu-hero-scroll.in { opacity:1; }
+.edu-hero-scroll span {
+  display:block; width:1px; height:32px; background:rgba(201,189,164,0.18);
+  animation:eduScrollLine 2s ease-in-out infinite;
+}
+@keyframes eduScrollLine {
+  0%,100% { transform:scaleY(0.3); opacity:0.2; }
+  50% { transform:scaleY(1); opacity:0.5; }
+}
+
+/* ---- 2. Vision — 美育畅想 ---- */
+.edu-vision { background:#0a0807; }
+.edu-vision-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  max-width:900px; width:100%; margin:0 auto;
+}
+.edu-vision-card {
+  padding:36px 28px; border-radius:6px; text-align:center;
+  border:1px solid rgba(249,245,235,0.04);
+  background:rgba(20,17,14,0.2);
+  transition:border-color 0.3s,background 0.3s;
+}
+.edu-vision-card:hover { border-color:rgba(201,160,132,0.12); background:rgba(20,17,14,0.35); }
+.edu-vision-card .vc-icon { font-size:1.8rem; margin-bottom:16px; opacity:0.35; }
+.edu-vision-card .vc-title {
+  font-size:0.8rem; font-weight:500; letter-spacing:0.06em;
+  color:rgba(249,245,235,0.5); margin-bottom:10px;
+}
+.edu-vision-card .vc-desc {
+  font-size:0.64rem; color:rgba(249,245,235,0.2); line-height:1.7;
+}
+
+/* ---- 3. First Pilot — 首个实践 ---- */
+.edu-pilot { background:#0f0d0b; }
+.edu-pilot-badge {
+  display:inline-block; font-size:0.55rem; letter-spacing:0.12em;
+  color:rgba(201,160,132,0.5); padding:4px 14px; border-radius:20px;
+  border:1px solid rgba(201,160,132,0.15);
+  background:rgba(201,160,132,0.04); margin-bottom:28px;
+}
+.edu-overview {
+  max-width:720px; width:100%; margin:0 auto 80px;
+  display:grid; grid-template-columns:1fr 1fr; gap:24px;
+}
+.edu-ov-card {
+  padding:28px 24px; border-radius:6px;
+  border:1px solid rgba(249,245,235,0.05);
+  background:rgba(20,17,14,0.3);
+}
+.edu-ov-card .ov-label {
+  font-size:0.55rem; letter-spacing:0.12em; color:rgba(201,160,132,0.35);
+  margin-bottom:10px; text-transform:uppercase;
+}
+.edu-ov-card .ov-text {
+  font-size:0.72rem; color:rgba(249,245,235,0.35); line-height:1.8;
+}
+
+/* Photo grid */
+.edu-photo-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px; max-width:1100px; width:100%; margin:0 auto;
+}
+.edu-photo-card {
+  position:relative; border-radius:6px; overflow:hidden;
+  border:1px solid rgba(249,245,235,0.04);
+  background:rgba(20,17,14,0.4);
+  transition:border-color 0.3s,transform 0.3s;
+}
+.edu-photo-card:hover {
+  border-color:rgba(201,160,132,0.15);
+  transform:translateY(-3px);
+}
+.edu-photo-card .ph-img {
+  width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
+}
+.edu-photo-card .ph-img-placeholder {
+  width:100%; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at center, rgba(201,160,132,0.06) 0%, rgba(20,17,14,0.4) 100%);
+  color:rgba(249,245,235,0.06); font-size:2.5rem;
+}
+.edu-photo-card .ph-info { padding:16px 18px; }
+.edu-photo-card .ph-name {
+  font-size:0.78rem; color:rgba(249,245,235,0.5); letter-spacing:0.04em; margin-bottom:6px;
+}
+.edu-photo-card .ph-note {
+  font-size:0.6rem; color:rgba(249,245,235,0.18); letter-spacing:0.04em; line-height:1.6;
+}
+
+/* ---- 4. Downloads ---- */
+.edu-downloads { background:#0a0807; min-height:auto; padding-bottom:160px; }
+.edu-dl-list {
+  max-width:600px; width:100%; margin:0 auto;
+  display:flex; flex-direction:column; gap:12px;
+}
+.edu-dl-item {
+  display:flex; align-items:center; gap:18px;
+  padding:18px 22px; border-radius:6px;
+  border:1px solid rgba(249,245,235,0.05);
+  background:rgba(20,17,14,0.2);
+  text-decoration:none; transition:all 0.3s;
+}
+.edu-dl-item:hover {
+  border-color:rgba(201,160,132,0.2);
+  background:rgba(20,17,14,0.45);
+}
+.edu-dl-icon {
+  width:38px; height:38px; border-radius:5px;
+  background:rgba(201,160,132,0.06);
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; color:rgba(249,245,235,0.25); flex-shrink:0;
+}
+.edu-dl-info { flex:1; min-width:0; }
+.edu-dl-name { font-size:0.76rem; color:rgba(249,245,235,0.5); letter-spacing:0.04em; margin-bottom:3px; }
+.edu-dl-meta { font-size:0.56rem; color:rgba(249,245,235,0.16); letter-spacing:0.06em; }
+.edu-dl-arrow { color:rgba(249,245,235,0.12); font-size:0.75rem; transition:color 0.3s; }
+.edu-dl-item:hover .edu-dl-arrow { color:var(--gold); }
+
+/* ---- 5. Future Courses ---- */
+.edu-future { background:#0f0d0b; min-height:auto; padding-bottom:160px; }
+.edu-future-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:20px; max-width:800px; width:100%; margin:0 auto;
+}
+.edu-future-card {
+  padding:40px 24px; border-radius:6px; text-align:center;
+  border:1px dashed rgba(249,245,235,0.05);
+  background:rgba(20,17,14,0.12);
+  transition:border-color 0.3s,background 0.3s;
+}
+.edu-future-card:hover { border-color:rgba(201,160,132,0.12); background:rgba(20,17,14,0.25); }
+.edu-future-card .fc-icon { font-size:1.6rem; margin-bottom:14px; opacity:0.2; }
+.edu-future-card .fc-name {
+  font-size:0.7rem; color:rgba(249,245,235,0.22); letter-spacing:0.06em; margin-bottom:6px;
+}
+.edu-future-card .fc-hint {
+  font-size:0.54rem; color:rgba(249,245,235,0.09); letter-spacing:0.08em;
+}
+
+/* ---- Footer ---- */
+.edu-footer {
+  text-align:center; padding:60px 24px; background:#0a0807;
+  border-top:1px solid rgba(249,245,235,0.04);
+}
+.edu-footer-strip { display:flex; gap:0; justify-content:center; margin-bottom:24px; }
+.edu-footer-strip span { width:18px; height:6px; display:block; border-radius:1px; }
+.edu-footer-text { font-size:0.6rem; color:rgba(249,245,235,0.14); letter-spacing:0.06em; line-height:1.8; }
+
+/* ---- Responsive ---- */
+@media(max-width:768px){
+  .edu-section { padding:80px 20px; }
+  .edu-vision-grid { grid-template-columns:1fr; gap:12px; }
+  .edu-overview { grid-template-columns:1fr; gap:12px; }
+  .edu-photo-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-dots">
+    <span style="background:#F9F5EB"></span><span style="background:#D7B072"></span><span style="background:#9E0507"></span>
+    <span style="background:#37312C"></span><span style="background:#7DC8B7"></span><span style="background:#5366C5"></span>
+  </div>
+  <p class="loader-title">敦煌美育色彩系统</p>
+  <div class="loader-line"></div>
+  <button class="loader-hint">进入探索</button>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
+  <ul class="nav-links">
+    <li><a href="colors.html">色彩系统</a></li>
+    <li><a href="color-exploration.html">色彩探索</a></li>
+    <li><a href="education.html" style="color:#fff">美育课程</a></li>
+    <li><a href="research.html">色彩溯源</a></li>
+    <li class="nav-coming"><a href="javascript:void(0)">敬请期待</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas class="global-canvas" id="globalCanvas"></canvas>
+
+<!-- ============================================================
+     S1 · HERO — 板块总览
+     ============================================================ -->
+<section class="edu-hero" id="hero">
+  <div class="edu-hero-bg"></div>
+  <div class="edu-hero-overlay"></div>
+  <div class="edu-hero-content">
+    <h1 class="edu-hero-title">让敦煌色，在课堂上活起来</h1>
+    <p class="edu-hero-sub">从117幅壁画中提取六个颜色，转化为中小学美育课程。<br>看得见的遗产，摸得着的色彩，带得走的一盏灯。</p>
+    <div class="edu-hero-tags">
+      <span class="edu-hero-tag">文化遗产 × 美育</span>
+      <span class="edu-hero-tag">PBL项目式学习</span>
+      <span class="edu-hero-tag">开源课程体系</span>
+    </div>
+  </div>
+  <div class="edu-hero-scroll" id="heroScroll">
+    <span></span>
+  </div>
+</section>
+
+<!-- ============================================================
+     S2 · 美育畅想
+     ============================================================ -->
+<section class="edu-section edu-vision" id="vision">
+  <span class="edu-section-label">Vision · 美育畅想</span>
+  <h2 class="edu-section-title">色彩不只是知识，更是体验</h2>
+  <p class="edu-section-sub">敦煌的色彩系统最终要回到孩子面前——不是背色值，不是学理论，而是用自己的眼睛去看，用自己的手去试，用自己的方式把千年前的颜料变成一盏会发光的灯</p>
+  <div class="edu-vision-grid">
+    <div class="edu-vision-card">
+      <div class="vc-icon">&#128065;</div>
+      <div class="vc-title">看见</div>
+      <div class="vc-desc">从洞窟壁画出发，在真实图像中识别六个敦煌主色，建立"这个红是天王的铠甲，那个绿是菩萨的衣带"的直观印象</div>
+    </div>
+    <div class="edu-vision-card">
+      <div class="vc-icon">&#129514;</div>
+      <div class="vc-title">理解</div>
+      <div class="vc-desc">角色为什么站在这里？颜色为什么这样搭？用"剧场"隐喻替代宗教概念，对称、站位、冷暖对比——九岁的孩子也能懂</div>
+    </div>
+    <div class="edu-vision-card">
+      <div class="vc-icon">&#127983;</div>
+      <div class="vc-title">创造</div>
+      <div class="vc-desc">每组孩子拿到一盏素灯，自己选角、定位、上色。把洞窟装进一盏灯——点亮的那一刻，敦煌就在他们手里</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     S3 · 首个实践：45窟课程
+     ============================================================ -->
+<section class="edu-section edu-pilot" id="pilot">
+  <span class="edu-section-label">First Pilot · 首个落地课程</span>
+  <h2 class="edu-section-title">一个洞窟，一群孩子，六个颜色</h2>
+  <p class="edu-section-sub">2025年4月，珠海金鼎学校三年级 · 莫高窟第45窟 · 2课时</p>
+  <span class="edu-pilot-badge">会讲故事的洞窟：45窟的角色图谱</span>
+
+  <div class="edu-overview">
+    <div class="edu-ov-card">
+      <div class="ov-label">第一课时 · 4月23日</div>
+      <div class="ov-text">把45窟比作一座"剧场"——佛是中心、菩萨在两侧、天王守门、力士撑场、飞天在天顶。孩子们分组识色、辨角色，用"像湖水一样的石绿""像火焰一样的铅丹"建立色彩感知。</div>
+    </div>
+    <div class="edu-ov-card">
+      <div class="ov-label">第二课时 · 4月30日</div>
+      <div class="ov-text">引入对称与空间——佛在中间、菩萨站两边、天王守外侧。"对称就是庄重"。每组孩子拿到素色纸灯，把学到的角色图谱转化为灯面装饰，选角、定位、上色，做出一盏自己的敦煌灯。</div>
+    </div>
+  </div>
+
+  <!-- Photo grid -->
+  <div class="edu-photo-grid">
+    <div class="edu-photo-card">
+      <div class="ph-img-placeholder">&#127983;</div>
+      <div class="ph-info">
+        <div class="ph-name">学生灯彩作品</div>
+        <div class="ph-note">将45窟角色图谱转化为灯面装饰，每盏灯都是一个孩子理解的敦煌</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/天王.png" alt="课堂素材">
+      <div class="ph-info">
+        <div class="ph-name">角色识色 · 天王</div>
+        <div class="ph-note">天王铠甲上的赭红——全场最"重"的颜色，孩子们最先记住的角色</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/菩萨.png" alt="课堂素材">
+      <div class="ph-info">
+        <div class="ph-name">角色识色 · 菩萨</div>
+        <div class="ph-note">菩萨衣带上的石绿——安静温柔的颜色，细看每一处都细细画过</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/飞天壁画.jpg" alt="课堂素材">
+      <div class="ph-info">
+        <div class="ph-name">角色识色 · 飞天</div>
+        <div class="ph-note">天顶的飞天飘带——石青色，来自万里之外阿富汗的青金石</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/力士姿态1.png" alt="课堂素材">
+      <div class="ph-info">
+        <div class="ph-name">角色识色 · 力士</div>
+        <div class="ph-note">画面底部的力士——墨玄色，托起整座洞窟的"地基"</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <div class="ph-img-placeholder">&#127912;</div>
+      <div class="ph-info">
+        <div class="ph-name">课堂教学现场</div>
+        <div class="ph-note">PBL小组协作，每桌一个洞窟角色课题</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     S4 · 教案下载
+     ============================================================ -->
+<section class="edu-section edu-downloads" id="downloads">
+  <span class="edu-section-label">Resources · 教学资源</span>
+  <h2 class="edu-section-title">教案与素材下载</h2>
+  <p class="edu-section-sub">开放使用，欢迎更多老师将敦煌色带进课堂</p>
+  <div class="edu-dl-list">
+    <a class="edu-dl-item" href="javascript:void(0)">
+      <div class="edu-dl-icon">&#128196;</div>
+      <div class="edu-dl-info">
+        <div class="edu-dl-name">敦煌45窟 · 色彩探索课程教案（第一课时）</div>
+        <div class="edu-dl-meta">含教学目标、课堂流程、角色图谱</div>
+      </div>
+      <span class="edu-dl-arrow">&#8594;</span>
+    </a>
+    <a class="edu-dl-item" href="javascript:void(0)">
+      <div class="edu-dl-icon">&#128196;</div>
+      <div class="edu-dl-info">
+        <div class="edu-dl-name">敦煌45窟 · 色彩探索课程教案（第二课时）</div>
+        <div class="edu-dl-meta">含空间对称教学、灯彩制作指导</div>
+      </div>
+      <span class="edu-dl-arrow">&#8594;</span>
+    </a>
+    <a class="edu-dl-item" href="javascript:void(0)">
+      <div class="edu-dl-icon">&#127912;</div>
+      <div class="edu-dl-info">
+        <div class="edu-dl-name">45窟角色图鉴卡（打印版）</div>
+        <div class="edu-dl-meta">佛 / 菩萨 / 天王 / 力士 / 飞天 — 课堂识色用</div>
+      </div>
+      <span class="edu-dl-arrow">&#8594;</span>
+    </a>
+    <a class="edu-dl-item" href="javascript:void(0)">
+      <div class="edu-dl-icon">&#127912;</div>
+      <div class="edu-dl-info">
+        <div class="edu-dl-name">敦煌六色 · 课堂色卡</div>
+        <div class="edu-dl-meta">窟白 / 煌金 / 铅丹 / 墨玄 / 石绿 / 石青 — 学生涂色用</div>
+      </div>
+      <span class="edu-dl-arrow">&#8594;</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     S5 · 系列课程
+     ============================================================ -->
+<section class="edu-section edu-future" id="future">
+  <span class="edu-section-label">Coming Soon · 系列课程</span>
+  <h2 class="edu-section-title">更多洞窟，更多课堂</h2>
+  <p class="edu-section-sub">以敦煌六色为主线，每个洞窟一期课，面向中小学美育持续开发</p>
+  <div class="edu-future-grid">
+    <div class="edu-future-card">
+      <div class="fc-icon">🏛</div>
+      <div class="fc-name">九色鹿的故事</div>
+      <div class="fc-hint">莫高窟第257窟 · 即将推出</div>
+    </div>
+    <div class="edu-future-card">
+      <div class="fc-icon">🏔</div>
+      <div class="fc-name">山水间的颜色</div>
+      <div class="fc-hint">历代山水壁画 · 即将推出</div>
+    </div>
+    <div class="edu-future-card">
+      <div class="fc-icon">🖐</div>
+      <div class="fc-name">手姿与线条</div>
+      <div class="fc-hint">敦煌手势艺术 · 即将推出</div>
+    </div>
+    <div class="edu-future-card">
+      <div class="fc-icon">📖</div>
+      <div class="fc-name">更多主题</div>
+      <div class="fc-hint">持续规划中</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="edu-footer">
+  <div class="edu-footer-strip">
+    <span style="background:#E6E3D8"></span><span style="background:#C9BDA4"></span><span style="background:#9E5C4A"></span><span style="background:#2B2124"></span><span style="background:#86998A"></span><span style="background:#687597"></span>
+  </div>
+  <p class="edu-footer-text">北京师范大学未来设计学院 × 敦煌研究院<br>课程设计：刘培岩 &nbsp; 赵桐瑶 &nbsp; 杨茜<br>珠海金鼎学校 · 三年级 · 2025年4月</p>
+</footer>
+
+<script src="js/common.js"></script>
+<script>
+DHP.initLoader(function() {
+  document.getElementById('heroScroll').classList.add('in');
+});
+</script>
+</body>
+</html>

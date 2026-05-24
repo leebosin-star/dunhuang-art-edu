@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DHP · 敦煌美育色彩系统</title>
+<meta name="description" content="从千年壁画中提取六种核心敦煌色，构建面向美育的开源色彩系统。北京师范大学未来设计学院 × 敦煌研究院。">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+SC:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<style>
+/* ============================================================
+   DHP · Landing Page v8 — 首页专用样式
+   ============================================================ */
+
+html { scroll-snap-type: y proximity; }
+
+/* ---- Loader overrides: match hero title for blast transition ---- */
+#loader .loader-title {
+  font-weight:700; letter-spacing:0.04em;
+  transition: transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.6s ease, text-shadow 0.9s ease;
+}
+
+/* ============================================================
+   SECTION · HERO
+   ============================================================ */
+.hero {
+  position:relative; height:100vh; display:flex;
+  align-items:center; justify-content:center; overflow:hidden;
+  scroll-snap-align:start;
+}
+.hero-bg {
+  position:absolute; inset:-20px;
+  background:url(chujiandunhuangshi/all/020260306_16425616.png) center/cover no-repeat;
+  filter:brightness(0.28);
+}
+.hero-overlay {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 45%,transparent 30%,rgba(15,13,11,0.8) 100%);
+}
+.hero-content {
+  position:relative; z-index:2; text-align:center;
+  max-width:860px; padding:0 40px;
+}
+.hero-title {
+  font-size:clamp(3.2rem,9vw,7.5rem);
+  font-weight:900; letter-spacing:0.02em; line-height:1.06;
+  opacity:0;
+}
+.hero-title.in { opacity:1; transition:opacity 0.9s ease; }
+.hero-sub {
+  font-family:"Cormorant Garamond","Georgia",serif;
+  font-size:clamp(0.9rem,1.6vw,1.1rem);
+  font-style:italic; color:var(--gold); letter-spacing:0.06em;
+  margin-top:20px; font-weight:400;
+  opacity:0; transform:translateY(20px);
+}
+.hero-sub.in { opacity:1; transform:translateY(0); transition:opacity 0.7s ease 0.2s,transform 0.7s ease 0.2s; }
+.hero-line {
+  width:40px; height:1px; background:var(--gold);
+  margin:28px auto; opacity:0;
+}
+.hero-line.in { opacity:1; transition:opacity 0.6s ease 0.4s,width 0.7s ease 0.4s; }
+.hero-desc {
+  font-size:clamp(0.82rem,1.2vw,0.95rem);
+  color:rgba(249,245,235,0.45); letter-spacing:0.08em; line-height:1.9;
+  opacity:0; transform:translateY(16px);
+}
+.hero-desc.in { opacity:1; transform:translateY(0); transition:opacity 0.7s ease 0.6s,transform 0.7s ease 0.6s; }
+.hero-scroll-hint {
+  position:absolute; bottom:48px; left:50%; transform:translateX(-50%);
+  z-index:2; font-size:0.65rem; letter-spacing:0.2em;
+  color:rgba(249,245,235,0.2); opacity:0;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.hero-scroll-hint.in { opacity:1; transition:opacity 0.7s ease 0.9s; }
+.hero-scroll-hint .hint-line {
+  width:1px; height:40px;
+  background:linear-gradient(180deg,var(--gold),transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   SECTION · 缘起
+   ============================================================ */
+.origin {
+  position:relative; min-height:100vh; display:flex;
+  align-items:center; overflow:hidden;
+  scroll-snap-align:start;
+}
+.origin-bg {
+  position:absolute; inset:-20px;
+  background:url(chujiandunhuangshi/all/020260306_16405385.png) center/cover no-repeat;
+  filter:brightness(0.18);
+}
+.origin-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(15,13,11,0.9) 0%,rgba(15,13,11,0.4) 50%,rgba(15,13,11,0.25) 100%);
+}
+.origin-inner {
+  position:relative; z-index:2; max-width:1100px; width:100%;
+  margin:0 auto; padding:120px 64px;
+  display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center;
+}
+.origin-visual {
+  position:relative; height:420px; overflow:hidden; border-radius:2px;
+  opacity:0; transform:translateX(-30px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.origin-visual.in { opacity:1; transform:translateX(0); }
+.origin-visual img { width:100%; height:100%; object-fit:cover; filter:brightness(0.55); }
+.origin-text-col {
+  opacity:0; transform:translateX(30px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.origin-text-col.in { opacity:1; transform:translateX(0); }
+.origin-label {
+  font-size:0.66rem; letter-spacing:0.2em; color:var(--gold);
+  display:block; margin-bottom:28px;
+}
+.origin-text { font-size:0.92rem; line-height:2.2; color:rgba(249,245,235,0.55); margin-bottom:24px; }
+.origin-text em { color:var(--gold); font-style:normal; }
+.origin-hook {
+  font-size:1.3rem; font-weight:600; color:var(--gold); line-height:1.7;
+  letter-spacing:0.02em; margin-top:32px;
+}
+
+/* ============================================================
+   SECTION · 色彩溯源 — 6-Step Timeline
+   ============================================================ */
+.method {
+  position:relative; min-height:100vh; display:flex;
+  align-items:center; overflow:hidden;
+  scroll-snap-align:start;
+}
+.method-bg {
+  position:absolute; inset:-20px;
+  background:url(chujiandunhuangshi/all/020260306_16572884.png) center/cover no-repeat;
+  filter:brightness(0.22) saturate(0.6);
+}
+.method-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(160deg,rgba(15,13,11,0.7) 0%,rgba(15,13,11,0.2) 40%,rgba(15,13,11,0.15) 60%,rgba(15,13,11,0.65) 100%);
+}
+.method-inner {
+  position:relative; z-index:2; width:100%; max-width:960px;
+  margin:0 auto; padding:120px 48px;
+}
+.method-label {
+  font-size:0.66rem; letter-spacing:0.2em; color:var(--gold);
+  display:block; text-align:center; margin-bottom:14px;
+  opacity:0; transform:translateY(10px);
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+.method-label.in { opacity:1; transform:translateY(0); }
+.method-title {
+  font-size:2.2rem; font-weight:700; letter-spacing:0.04em; text-align:center; margin-bottom:64px;
+  opacity:0; transform:translateY(14px);
+  transition:opacity 0.6s ease 0.1s,transform 0.6s ease 0.1s;
+}
+.method-title.in { opacity:1; transform:translateY(0); }
+
+/* Timeline */
+.timeline {
+  position:relative; max-width:760px; margin:0 auto;
+}
+.tl-line {
+  position:absolute; left:50%; top:8px; bottom:8px;
+  width:1px; transform:translateX(-50%);
+  background:linear-gradient(to bottom,transparent 0%,rgba(201,160,132,0.12) 8%,rgba(201,160,132,0.18) 50%,rgba(201,160,132,0.12) 92%,transparent 100%);
+}
+.tl-step {
+  display:flex; align-items:flex-start;
+  margin-bottom:clamp(32px,5vh,52px);
+  opacity:0; transform:translateY(24px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.tl-step.in { opacity:1; transform:translateY(0); }
+.tl-step.left  { justify-content:flex-end; padding-right:calc(50% + 44px); }
+.tl-step.right { justify-content:flex-start; padding-left:calc(50% + 44px); }
+
+.tl-dot {
+  position:absolute; left:50%; top:16px;
+  width:10px; height:10px; border-radius:50%;
+  background:rgba(201,160,132,0.25);
+  transform:translate(-50%,-50%);
+  transition:background 0.4s,box-shadow 0.4s,transform 0.4s;
+}
+.tl-step:hover .tl-dot {
+  background:var(--gold);
+  box-shadow:0 0 18px rgba(201,160,132,0.5);
+  transform:translate(-50%,-50%) scale(1.5);
+}
+
+.tl-body { max-width:300px; transition:transform 0.4s; }
+.tl-step:hover .tl-body { transform:translateY(-2px); }
+.tl-num {
+  font-family:"Cormorant Garamond","Georgia",serif;
+  font-size:2.4rem; font-weight:200; line-height:1;
+  color:rgba(201,160,132,0.1);
+  margin-bottom:2px;
+  transition:color 0.4s;
+}
+.tl-step:hover .tl-num { color:rgba(201,160,132,0.28); }
+.tl-name {
+  font-size:1.05rem; font-weight:600; letter-spacing:0.04em; margin-bottom:6px;
+}
+.tl-desc {
+  font-size:0.75rem; line-height:1.85; color:rgba(249,245,235,0.28);
+}
+
+.method-footer {
+  display:inline-block; margin-top:48px; text-align:center; width:100%;
+  font-size:0.72rem; letter-spacing:0.1em;
+  color:var(--gold); text-decoration:none;
+  opacity:0; transform:translateY(10px);
+  transition:opacity 0.6s ease 0.8s,transform 0.6s ease 0.8s,color 0.4s;
+}
+.method-footer.in { opacity:1; transform:translateY(0); }
+.method-footer:hover { color:#fff; }
+
+/* ============================================================
+   SECTION · 六色亮相
+   ============================================================ */
+.colors-strip { position:relative; height:100vh; display:flex; scroll-snap-align:start; }
+.color-bar {
+  flex:1; height:100%; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  cursor:pointer; position:relative; overflow:hidden;
+  transition:flex 0.65s cubic-bezier(0.22,0.61,0.36,1),opacity 0.5s ease,transform 0.5s ease;
+  opacity:0; transform:translateY(40px);
+}
+.color-bar.in { opacity:1; transform:translateY(0); }
+.color-bar:hover { flex:2.2; }
+.color-bar::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,0.35) 100%);
+  z-index:0;
+}
+.color-bar-inner {
+  display:flex; flex-direction:column; align-items:center;
+  writing-mode:vertical-rl; text-orientation:mixed; gap:6px; z-index:1;
+  transition:transform 0.5s ease;
+  text-shadow:0 0 14px rgba(0,0,0,0.5);
+}
+.color-bar-chapter { font-size:0.78rem; letter-spacing:0.28em; font-weight:400; opacity:0.75; }
+.color-bar-dash { opacity:0.2; }
+.color-bar-name { font-size:1.4rem; font-weight:700; letter-spacing:0.32em; }
+.color-bar-code { font-size:0.58rem; opacity:0.3; letter-spacing:0.1em; margin-top:12px; }
+.color-bar-detail {
+  position:absolute; bottom:56px; left:0; right:0; text-align:center;
+  opacity:0; transform:translateY(16px);
+  transition:all 0.5s ease 0.15s;
+  font-size:0.7rem; line-height:2; padding:0 16px;
+  pointer-events:none;
+  text-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+.color-bar:hover .color-bar-detail { opacity:1; transform:translateY(0); }
+
+/* ============================================================
+   SECTION · 三大模块
+   ============================================================ */
+.modules { position:relative; height:100vh; display:flex; gap:1px; scroll-snap-align:start; }
+.module-card {
+  flex:1; height:100%; position:relative; overflow:hidden;
+  cursor:pointer; text-decoration:none; color:inherit;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:translateY(30px);
+  transition:opacity 0.7s ease;
+}
+.module-card.in { opacity:1; transform:translateY(0); }
+.module-card:hover { z-index:5; }
+.module-bg {
+  position:absolute; inset:0; background-size:cover; background-position:center;
+  transition:transform 1s ease,filter 0.8s;
+}
+.module-card:hover .module-bg { transform:scale(1.1); filter:brightness(0.7); }
+.module-dim {
+  position:absolute; inset:0;
+  background:rgba(15,13,11,0.55);
+  transition:opacity 0.6s;
+}
+.module-card:hover .module-dim { opacity:0.3; }
+.module-inner { position:relative; z-index:2; text-align:center; }
+.module-num {
+  font-size:7rem; font-weight:200; line-height:1;
+  color:rgba(249,245,235,0.05);
+  margin-bottom:14px; transition:color 0.6s;
+}
+.module-card:hover .module-num { color:rgba(249,245,235,0.1); }
+.module-name { font-size:1.7rem; font-weight:700; letter-spacing:0.06em; margin-bottom:6px; }
+.module-en {
+  font-family:"Cormorant Garamond","Georgia",serif;
+  font-size:0.8rem; font-style:italic; color:var(--gold); opacity:0.45; margin-bottom:20px;
+}
+.module-desc { font-size:0.78rem; line-height:1.8; color:rgba(249,245,235,0.35); max-width:200px; }
+.module-enter {
+  display:inline-block; margin-top:28px; font-size:0.72rem;
+  letter-spacing:0.12em; color:var(--gold);
+  opacity:0; transform:translateY(10px);
+  transition:all 0.5s ease 0.1s;
+}
+.module-card:hover .module-enter { opacity:1; transform:translateY(0); }
+
+/* ============================================================
+   SECTION · 合作
+   ============================================================ */
+.partners {
+  position:relative; min-height:100vh; display:flex;
+  align-items:center; justify-content:center; overflow:hidden;
+  scroll-snap-align:start;
+}
+.partners-bg {
+  position:absolute; inset:-20px;
+  background:url(assets/鹿王本生修复1.png) center/cover no-repeat;
+  filter:brightness(0.13);
+}
+.partners-overlay {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 50%,transparent 15%,rgba(15,13,11,0.9) 100%);
+}
+.partners-inner {
+  position:relative; z-index:2; max-width:780px; padding:120px 48px; text-align:center;
+}
+.partners-label {
+  font-size:0.66rem; letter-spacing:0.2em; color:var(--gold);
+  display:block; margin-bottom:24px;
+  opacity:0; transform:translateY(10px);
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+.partners-label.in { opacity:1; transform:translateY(0); }
+.partners-title {
+  font-size:1.5rem; font-weight:700; letter-spacing:0.06em; margin-bottom:28px;
+  opacity:0; transform:translateY(14px);
+  transition:opacity 0.6s ease 0.1s,transform 0.6s ease 0.1s;
+}
+.partners-title.in { opacity:1; transform:translateY(0); }
+.partners-text {
+  font-size:0.9rem; line-height:2.2; color:rgba(249,245,235,0.4);
+  margin-bottom:20px;
+  opacity:0; transform:translateY(12px);
+  transition:opacity 0.6s ease 0.2s,transform 0.6s ease 0.2s;
+}
+.partners-text.in { opacity:1; transform:translateY(0); }
+.partners-logos {
+  display:flex; align-items:center; justify-content:center; gap:40px;
+  margin-top:48px;
+  opacity:0; transition:opacity 0.6s ease 0.4s;
+}
+.partners-logos.in { opacity:1; }
+.partners-logos span {
+  font-size:0.85rem; letter-spacing:0.08em; color:rgba(249,245,235,0.3);
+  font-weight:500; line-height:1.8; text-align:center;
+}
+.partners-divider { width:1px; height:24px; background:rgba(249,245,235,0.1); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  position:absolute; bottom:0; left:0; right:0; z-index:3;
+  padding:32px 48px; display:flex; align-items:flex-end;
+  justify-content:space-between;
+  pointer-events:none;
+}
+.footer-left { font-size:0.62rem; color:rgba(249,245,235,0.15); letter-spacing:0.05em; line-height:2; }
+.footer-right { text-align:right; font-size:0.62rem; color:rgba(249,245,235,0.12); letter-spacing:0.04em; line-height:2; }
+.footer-color-strip { display:flex; height:3px; width:140px; border-radius:2px; overflow:hidden; margin-bottom:12px; }
+.footer-color-strip span { flex:1; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:768px){
+  .origin-inner { grid-template-columns:1fr; gap:40px; padding:80px 32px; }
+  .origin-visual { height:240px; }
+  .method-inner { padding:80px 28px; }
+  .method-title { font-size:1.6rem; margin-bottom:40px; }
+  .tl-line { left:20px; }
+  .tl-step.left, .tl-step.right { padding-left:48px; padding-right:0; flex-direction:row; text-align:left; }
+  .tl-dot { left:20px; }
+  .tl-card { max-width:100%; }
+  .colors-strip { flex-wrap:wrap; }
+  .color-bar { flex:0 0 33.333%; height:50vh; }
+  .modules { flex-direction:column; }
+  .module-name { font-size:1.3rem; }
+  .footer { flex-direction:column; align-items:center; text-align:center; gap:16px; padding:24px; }
+  .footer-right { text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas class="global-canvas" id="globalCanvas"></canvas>
+
+<!-- ============================================================
+     LOADING SCREEN
+     ============================================================ -->
+<div id="loader">
+  <div class="loader-dots">
+    <span style="background:#F9F5EB"></span>
+    <span style="background:#D7B072"></span>
+    <span style="background:#9E0507"></span>
+    <span style="background:#37312C"></span>
+    <span style="background:#7DC8B7"></span>
+    <span style="background:#5366C5"></span>
+  </div>
+  <p class="loader-title">敦煌美育色彩系统</p>
+  <div class="loader-line"></div>
+  <button class="loader-hint">点击探索</button>
+</div>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="nav" id="nav">
+  <a href="dhp.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
+  <ul class="nav-links">
+    <li><a href="colors.html">色彩系统</a></li>
+    <li><a href="color-exploration.html">色彩探索</a></li>
+    <li><a href="education.html">美育课程</a></li>
+    <li><a href="research.html">色彩溯源</a></li>
+    <li class="nav-coming"><a href="javascript:void(0)">敬请期待</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="菜单"><span></span><span></span></button>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title" id="heroTitle">敦煌美育色彩系统</h1>
+    <p class="hero-sub" id="heroSub">The Dunhuang Aesthetic Education Color System</p>
+    <div class="hero-line" id="heroLine"></div>
+    <p class="hero-desc" id="heroDesc">从千年壁画中提取，让古老色彩在当下继续生长</p>
+  </div>
+  <div class="hero-scroll-hint" id="heroHint">
+    <span>SCROLL</span>
+    <div class="hint-line"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ORIGIN · 缘起
+     ============================================================ -->
+<section class="origin" id="origin">
+  <div class="origin-bg"></div>
+  <div class="origin-overlay"></div>
+  <div class="origin-inner">
+    <div class="origin-visual"><img src="chujiandunhuangshi/all/020260306_16402441.png" alt=""></div>
+    <div class="origin-text-col">
+      <span class="origin-label">缘起 · ORIGIN</span>
+      <p class="origin-text">敦煌莫高窟历经千年营造，是横跨丝路、西域与中原的<em>色彩文明交汇之地</em>。其颜料以矿物为本——石青自阿富汗经丝路万里而来，石绿由孔雀石细细研磨，铅丹与朱砂在石窟中凝固成千年不褪的红。</p>
+      <p class="origin-text">然而<em>氧化变色、图像失真与审美断层</em>，让这些古老的色彩语言逐渐失落。色彩还在，但讲述它们的方式断裂了。如何让壁画中的色彩进入现代美育与传播语境，是这个研究的出发点。</p>
+      <p class="origin-hook">我们从壁画中重新提取，重新命名，重新让它们生长。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     METHOD · 研究方法
+     ============================================================ -->
+<section class="method" id="method">
+  <div class="method-bg"></div>
+  <div class="method-overlay"></div>
+  <div class="method-inner">
+    <span class="method-label">重新提取</span>
+    <h2 class="method-title">六步，从壁画到六色</h2>
+
+    <div class="timeline">
+      <div class="tl-line"></div>
+
+      <div class="tl-step left" data-delay="0.1">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-num">01</div>
+          <div class="tl-name">壁画采样</div>
+          <div class="tl-desc">117幅敦煌复原壁画，覆盖北凉至元代十三个朝代。每幅等量取色，汇成23万个色彩数据点</div>
+        </div>
+      </div>
+
+      <div class="tl-step right" data-delay="0.25">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-num">02</div>
+          <div class="tl-name">换一把尺子</div>
+          <div class="tl-desc">从RGB换成按人眼感知校准的CIE L*a*b*色彩空间——坐标距离就是眼睛看到的差异</div>
+        </div>
+      </div>
+
+      <div class="tl-step left" data-delay="0.4">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-num">03</div>
+          <div class="tl-name">让颜色自己找同伴</div>
+          <div class="tl-desc">23万个色点撒入LAB空间，聚类算法反复计算、调整、再分组，让颜色自动找到最相像的族群</div>
+        </div>
+      </div>
+
+      <div class="tl-step right" data-delay="0.55">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-num">04</div>
+          <div class="tl-name">归入六色</div>
+          <div class="tl-desc">基于NCS六色框架，像素频次 × 出现幅数 × 凝聚度三项加权排序，六个核心敦煌色浮出水面</div>
+        </div>
+      </div>
+
+      <div class="tl-step left" data-delay="0.7">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-num">05</div>
+          <div class="tl-name">美育提亮</div>
+          <div class="tl-desc">壁画原作色彩沉稳内敛，为适应现代屏幕与课堂环境，六色在保持色相本质的前提下适度提亮，让千年色彩在当下更可感、可用</div>
+        </div>
+      </div>
+
+      <div class="tl-step right" data-delay="0.85">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-num">06</div>
+          <div class="tl-name">六个颜色，千年敦煌的色谱指纹</div>
+          <div class="tl-desc">敦煌自己留下了它们。每种颜色都可以在具体的石窟壁画中找到出处</div>
+        </div>
+      </div>
+    </div>
+    <a class="method-footer" href="research.html">深入探索取色路径 →</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     COLORS · 六色亮相
+     ============================================================ -->
+<section class="colors-strip" id="colorsStrip">
+  <a class="color-bar" href="colors.html#detail-white" style="background:linear-gradient(180deg,#E6E3D8 0%,#E6E3D8 32%,#F9F5EB 68%,#F9F5EB 100%);color:#F9F5EB" data-delay="0" data-gradient="linear-gradient(180deg,#E6E3D8 0%,#E6E3D8 32%,#F9F5EB 68%,#F9F5EB 100%)">
+    <div class="color-bar-inner">
+      <span class="color-bar-chapter">窟壁生白</span><span class="color-bar-dash">—</span><span class="color-bar-name">窟白</span><span class="color-bar-code">DHP-W-M</span>
+    </div>
+    <div class="color-bar-detail" style="color:rgba(249,245,235,0.55)">#E6E3D8 → #F9F5EB · 34.7%<br>石灰岩底色，美育素壁之基</div>
+  </a>
+  <a class="color-bar" href="colors.html#detail-yellow" style="background:linear-gradient(180deg,#C9BDA4 0%,#C9BDA4 32%,#D7B072 68%,#D7B072 100%);color:#F9F5EB" data-delay="0.08" data-gradient="linear-gradient(180deg,#C9BDA4 0%,#C9BDA4 32%,#D7B072 68%,#D7B072 100%)">
+    <div class="color-bar-inner">
+      <span class="color-bar-chapter">窟壁煌光</span><span class="color-bar-dash">—</span><span class="color-bar-name">煌金</span><span class="color-bar-code">DHP-Y-M</span>
+    </div>
+    <div class="color-bar-detail" style="color:rgba(249,245,235,0.55)">#C9BDA4 → #D7B072 · 22.4%<br>赭石与黄土，大地暖意</div>
+  </a>
+  <a class="color-bar" href="colors.html#detail-red" style="background:linear-gradient(180deg,#9E5C4A 0%,#9E5C4A 32%,#9E0507 68%,#9E0507 100%);color:#F9F5EB" data-delay="0.16" data-gradient="linear-gradient(180deg,#9E5C4A 0%,#9E5C4A 32%,#9E0507 68%,#9E0507 100%)">
+    <div class="color-bar-inner">
+      <span class="color-bar-chapter">铅丹映壁</span><span class="color-bar-dash">—</span><span class="color-bar-name">铅丹</span><span class="color-bar-code">DHP-R-M</span>
+    </div>
+    <div class="color-bar-detail" style="color:rgba(249,245,235,0.55)">#9E5C4A → #9E0507 · 20.5%<br>朱砂与铅丹混合，千年不褪</div>
+  </a>
+  <a class="color-bar" href="colors.html#detail-black" style="background:linear-gradient(180deg,#2B2124 0%,#2B2124 32%,#37312C 68%,#37312C 100%);color:#F9F5EB" data-delay="0.24" data-gradient="linear-gradient(180deg,#2B2124 0%,#2B2124 32%,#37312C 68%,#37312C 100%)">
+    <div class="color-bar-inner">
+      <span class="color-bar-chapter">墨定乾坤</span><span class="color-bar-dash">—</span><span class="color-bar-name">墨玄</span><span class="color-bar-code">DHP-K-M</span>
+    </div>
+    <div class="color-bar-detail" style="color:rgba(249,245,235,0.55)">#2B2124 → #37312C · 14.2%<br>墨与氧化铁，万形之骨</div>
+  </a>
+  <a class="color-bar" href="colors.html#detail-green" style="background:linear-gradient(180deg,#86998A 0%,#86998A 32%,#7DC8B7 68%,#7DC8B7 100%);color:#F9F5EB" data-delay="0.32" data-gradient="linear-gradient(180deg,#86998A 0%,#86998A 32%,#7DC8B7 68%,#7DC8B7 100%)">
+    <div class="color-bar-inner">
+      <span class="color-bar-chapter">翠微山色</span><span class="color-bar-dash">—</span><span class="color-bar-name">石绿</span><span class="color-bar-code">DHP-G-M</span>
+    </div>
+    <div class="color-bar-detail" style="color:rgba(249,245,235,0.55)">#86998A → #7DC8B7 · 4.7%<br>孔雀石研磨之绿，冷暖平衡</div>
+  </a>
+  <a class="color-bar" href="colors.html#detail-blue" style="background:linear-gradient(180deg,#687597 0%,#687597 32%,#5366C5 68%,#5366C5 100%);color:#F9F5EB" data-delay="0.4" data-gradient="linear-gradient(180deg,#687597 0%,#687597 32%,#5366C5 68%,#5366C5 100%)">
+    <div class="color-bar-inner">
+      <span class="color-bar-chapter">青穹佛国</span><span class="color-bar-dash">—</span><span class="color-bar-name">石青</span><span class="color-bar-code">DHP-B-M</span>
+    </div>
+    <div class="color-bar-detail" style="color:rgba(249,245,235,0.55)">#687597 → #5366C5 · 3.6%<br>青金石经丝路万里而来</div>
+  </a>
+</section>
+
+<!-- ============================================================
+     MODULES · 四大板块
+     ============================================================ -->
+<section class="modules" id="modules">
+  <a class="module-card" href="colors.html#detail-white" data-delay="0">
+    <div class="module-bg" style="background-image:url(chujiandunhuangshi/all/020260306_16383971.png)"></div>
+    <div class="module-dim"></div>
+    <div class="module-inner">
+      <div class="module-num">01</div><div class="module-name">色彩系统</div><div class="module-en">Color System</div>
+      <div class="module-desc">六大色系，逐色叙事，完整色彩语言体系</div>
+      <span class="module-enter">进入探索</span>
+    </div>
+  </a>
+  <a class="module-card" href="color-exploration.html" data-delay="0.1">
+    <div class="module-bg" style="background-image:url(chujiandunhuangshi/all/020260306_16421938.png)"></div>
+    <div class="module-dim"></div>
+    <div class="module-inner">
+      <div class="module-num">02</div><div class="module-name">色彩探索</div><div class="module-en">Color Exploration</div>
+      <div class="module-desc">图像取色 · 智能配色 · 互动体验</div>
+      <span class="module-enter">进入探索</span>
+    </div>
+  </a>
+  <a class="module-card" href="research.html" data-delay="0.2">
+    <div class="module-bg" style="background-image:url(chujiandunhuangshi/all/020260306_16504895.png)"></div>
+    <div class="module-dim"></div>
+    <div class="module-inner">
+      <div class="module-num">03</div><div class="module-name">色彩溯源</div><div class="module-en">Color Origins</div>
+      <div class="module-desc">从117幅壁画到六个颜色，取色路径全记录</div>
+      <span class="module-enter">进入探索</span>
+    </div>
+  </a>
+  <a class="module-card" href="education.html" data-delay="0.3">
+    <div class="module-bg" style="background-image:url(chujiandunhuangshi/all/020260306_16425616.png)"></div>
+    <div class="module-dim"></div>
+    <div class="module-inner">
+      <div class="module-num">04</div><div class="module-name">美育课程</div><div class="module-en">Education</div>
+      <div class="module-desc">一个洞窟，一群孩子，六个颜色——课堂现场</div>
+      <span class="module-enter">进入探索</span>
+    </div>
+  </a>
+</section>
+
+<!-- ============================================================
+     PARTNERS · 合作
+     ============================================================ -->
+<section class="partners" id="partners">
+  <div class="partners-bg"></div>
+  <div class="partners-overlay"></div>
+  <div class="partners-inner">
+    <span class="partners-label">Partnership</span>
+    <h2 class="partners-title">北京师范大学 &times; 敦煌研究院</h2>
+    <p class="partners-text">2025年11月，北京师范大学与敦煌研究院签署合作协议。双方围绕中华优秀传统文化传承、美育课程建设、教材出版与人才培养展开深度合作。</p>
+    <p class="partners-text">敦煌研究院拥有丰富的文化遗产资源与学术研究基础；北京师范大学在教师教育、课程设计领域具有突出优势。双方携手推动"文化遗产+美育"的创新范式，为构建具有中国特色的现代学校美育体系提供示范。</p>
+    <p class="partners-text">本项目由北京师范大学未来设计学院执行，是继2022年故宫美育合作之后的又一重要文化教育行动。</p>
+    <div class="partners-logos">
+      <span>北京师范大学<br>未来设计学院</span>
+      <span class="partners-divider"></span>
+      <span>敦煌研究院</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      <div class="footer-color-strip">
+        <span style="background:#E6E3D8"></span><span style="background:#C9BDA4"></span><span style="background:#9E5C4A"></span><span style="background:#2B2124"></span><span style="background:#86998A"></span><span style="background:#687597"></span>
+      </div>
+      敦煌色彩系统 &middot; Dunhuang Color System<br>
+      Copyright &copy; 2025–2026 School of Future Design, BNU
+    </div>
+    <div class="footer-right">
+      网站作者：廖金玥 &nbsp; 李博昕<br>
+      指导：高鹏 &nbsp; 王敏 &nbsp; 詹震宇 &nbsp; 钟旭 &nbsp; 周燕 &nbsp; 郭嘉樑
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="js/color-data.js"></script>
+<script src="js/common.js"></script>
+<script>
+/* DHP · Landing Page v8 — 首页专用逻辑 */
+(function(){
+
+// ============================================================
+// CUSTOM LOADER — 首页专用：标题炸开过渡到 Hero
+// ============================================================
+(function initHomeLoader(){
+  var loader = document.getElementById('loader');
+  var dots = loader.querySelectorAll('.loader-dots span');
+  var title = loader.querySelector('.loader-title');
+  var line = loader.querySelector('.loader-line');
+  var hint = loader.querySelector('.loader-hint');
+  var dismissed = false;
+
+  // Entrance animations
+  dots.forEach(function(dot, i) {
+    dot.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    dot.style.transform = 'scale(0)';
+    dot.style.opacity = '0';
+    setTimeout(function() {
+      dot.style.transform = 'scale(1)';
+      dot.style.opacity = '0.7';
+    }, 300 + i * 120);
+  });
+  setTimeout(function() {
+    title.style.transition = 'opacity 0.8s ease';
+    title.style.opacity = '1';
+  }, 1100);
+  setTimeout(function() {
+    line.style.transition = 'width 0.8s ease, opacity 0.6s ease';
+    line.style.width = '80px';
+    line.style.opacity = '0.4';
+  }, 1500);
+  setTimeout(function() {
+    hint.style.transition = 'opacity 0.6s ease';
+    hint.style.opacity = '1';
+  }, 2000);
+
+  function animateHeroIn() {
+    document.getElementById('heroTitle').classList.add('in');
+    document.getElementById('heroSub').classList.add('in');
+    document.getElementById('heroLine').classList.add('in');
+    document.getElementById('heroDesc').classList.add('in');
+    document.getElementById('heroHint').classList.add('in');
+  }
+
+  function dismiss() {
+    if (dismissed) return;
+    dismissed = true;
+
+    // Phase 1: title blasts — slow scale + afterimage glow + fade
+    title.style.transition = 'transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.6s ease, text-shadow 0.9s ease';
+    title.style.transform = 'scale(3.2)';
+    title.style.opacity = '0';
+    title.style.textShadow = '0 0 60px rgba(249,245,235,0.35), 0 0 140px rgba(249,245,235,0.15)';
+
+    // Phase 2: loader chrome fades, hero reveals
+    setTimeout(function() {
+      loader.style.transition = 'opacity 0.6s ease';
+      loader.style.opacity = '0';
+      loader.style.pointerEvents = 'none';
+      document.getElementById('nav').classList.add('visible');
+      animateHeroIn();
+    }, 550);
+  }
+
+  loader.addEventListener('click', dismiss);
+  document.addEventListener('keydown', function(e) {
+    if (!dismissed && (e.key === 'Enter' || e.key === ' ')) {
+      dismiss();
+    }
+  });
+})();
+
+// ============================================================
+// INTERSECTION OBSERVER — Scroll-triggered animations
+// ============================================================
+var sectionObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (!entry.isIntersecting) return;
+
+    var section = entry.target;
+
+    if (section.id === 'origin') {
+      var visual = section.querySelector('.origin-visual');
+      var textCol = section.querySelector('.origin-text-col');
+      setTimeout(function() { visual.classList.add('in'); }, 150);
+      setTimeout(function() { textCol.classList.add('in'); }, 350);
+      sectionObserver.unobserve(section);
+    }
+
+    if (section.id === 'method') {
+      var label = section.querySelector('.method-label');
+      var title = section.querySelector('.method-title');
+      var steps = section.querySelectorAll('.tl-step');
+      var footer = section.querySelector('.method-footer');
+
+      setTimeout(function() { label.classList.add('in'); title.classList.add('in'); }, 100);
+      steps.forEach(function(step) {
+        var delay = parseFloat(step.getAttribute('data-delay')) || 0;
+        setTimeout(function() { step.classList.add('in'); }, 200 + delay * 1000);
+      });
+      setTimeout(function() { footer.classList.add('in'); }, 1100);
+      sectionObserver.unobserve(section);
+    }
+
+    if (section.id === 'colorsStrip') {
+      var bars = section.querySelectorAll('.color-bar');
+      bars.forEach(function(bar) {
+        var delay = parseFloat(bar.getAttribute('data-delay')) || 0;
+        setTimeout(function() { bar.classList.add('in'); }, 150 + delay * 1000);
+      });
+      sectionObserver.unobserve(section);
+    }
+
+    if (section.id === 'modules') {
+      var cards = section.querySelectorAll('.module-card');
+      cards.forEach(function(card) {
+        var delay = parseFloat(card.getAttribute('data-delay')) || 0;
+        setTimeout(function() { card.classList.add('in'); }, 150 + delay * 1000);
+      });
+      sectionObserver.unobserve(section);
+    }
+
+    if (section.id === 'partners') {
+      var pl = section.querySelector('.partners-label');
+      var pt = section.querySelector('.partners-title');
+      var texts = section.querySelectorAll('.partners-text');
+      var logos = section.querySelector('.partners-logos');
+
+      setTimeout(function() { pl.classList.add('in'); }, 150);
+      setTimeout(function() { pt.classList.add('in'); }, 300);
+      texts.forEach(function(t, i) {
+        setTimeout(function() { t.classList.add('in'); }, 450 + i * 100);
+      });
+      setTimeout(function() { logos.classList.add('in'); }, 700);
+      sectionObserver.unobserve(section);
+    }
+  });
+}, { threshold: 0.2 });
+
+['origin','method','colorsStrip','modules','partners'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) sectionObserver.observe(el);
+});
+
+// ============================================================
+// PAGE-SPECIFIC MOUSE HANDLERS
+// ============================================================
+var heroTitle = document.getElementById('heroTitle');
+var heroBg = document.getElementById('heroBg');
+
+function updateHeroParallax(e) {
+  var hero = document.getElementById('hero');
+  var rect = hero.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+  var W = DHP.getW(), H = DHP.getH();
+  var cx = (e.clientX / W - 0.5) * 2;
+  var cy = (e.clientY / H - 0.5) * 2;
+  if (heroTitle) {
+    heroTitle.style.transform = 'translate(' + (cx * -8) + 'px,' + (cy * -6) + 'px)';
+  }
+  if (heroBg) {
+    heroBg.style.transform = 'translate(' + (cx * 4) + 'px,' + (cy * 3) + 'px)';
+  }
+}
+
+function updateCardTilt(e) {
+  var modules = document.getElementById('modules');
+  var rect = modules.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+  var cards = modules.querySelectorAll('.module-card');
+  cards.forEach(function(card) {
+    var cr = card.getBoundingClientRect();
+    var cx = (e.clientX - cr.left) / cr.width - 0.5;
+    var cy = (e.clientY - cr.top) / cr.height - 0.5;
+    var tilt = 4;
+    var baseTransform = card.classList.contains('in') ? '' : 'translateY(30px)';
+    card.style.transform = 'perspective(800px) rotateY(' + (cx * tilt) + 'deg) rotateX(' + (-cy * tilt) + 'deg) ' + baseTransform;
+  });
+}
+
+function updateBarGlow(e) {
+  var strip = document.getElementById('colorsStrip');
+  var rect = strip.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+  strip.querySelectorAll('.color-bar').forEach(function(bar) {
+    var br = bar.getBoundingClientRect();
+    var relX = ((e.clientX - br.left) / br.width) * 100;
+    var relY = ((e.clientY - br.top) / br.height) * 100;
+    var baseGrad = bar.getAttribute('data-gradient') || '';
+    if (relX >= 0 && relX <= 100 && relY >= 0 && relY <= 100) {
+      bar.style.backgroundImage = 'radial-gradient(circle at ' + relX + '% ' + relY + '%, rgba(255,255,255,0.06) 0%, transparent 50%)' + (baseGrad ? ', ' + baseGrad : '');
+    } else {
+      bar.style.backgroundImage = baseGrad;
+    }
+  });
+}
+
+DHP.onMouseMove = function(e) {
+  updateHeroParallax(e);
+  updateCardTilt(e);
+  updateBarGlow(e);
+};
+
+})();
+</script>
+</body>
+</html>

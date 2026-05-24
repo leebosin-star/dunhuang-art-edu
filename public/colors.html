@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DHP · 色彩系统</title>
+<meta name="description" content="敦煌美育色彩系统 — 六大色系，逐色叙事，完整色彩语言体系">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+SC:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<style>
+/* ============================================================
+   DHP · Color System — 色彩系统专用样式
+   ============================================================ */
+
+html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+
+/* ---- Overview Strip ---- */
+.overview-strip {
+  height: 100vh; display: flex; scroll-snap-align: start;
+}
+.overview-bar {
+  flex: 1; height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: flex 0.65s cubic-bezier(0.22,0.61,0.36,1), opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0; transform: translateY(40px);
+  text-decoration: none;
+}
+.overview-bar.in { opacity: 1; transform: translateY(0); }
+.overview-bar:hover { flex: 2.2; }
+.overview-bar::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.35) 100%);
+  z-index: 0;
+}
+.overview-bar-inner {
+  display: flex; flex-direction: column; align-items: center;
+  writing-mode: vertical-rl; text-orientation: mixed; gap: 6px; z-index: 1;
+  transition: transform 0.5s ease;
+  text-shadow: 0 0 14px rgba(0,0,0,0.5);
+}
+.overview-bar-chapter { font-size: 0.78rem; letter-spacing: 0.28em; font-weight: 400; opacity: 0.75; }
+.overview-bar-dash { opacity: 0.2; }
+.overview-bar-name { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.32em; }
+.overview-bar-code { font-size: 0.58rem; opacity: 0.3; letter-spacing: 0.1em; margin-top: 12px; }
+.overview-bar-detail {
+  position: absolute; bottom: 56px; left: 0; right: 0; text-align: center;
+  opacity: 0; transform: translateY(16px);
+  transition: all 0.5s ease 0.15s;
+  font-size: 0.7rem; line-height: 2; padding: 0 16px;
+  pointer-events: none;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.overview-bar:hover .overview-bar-detail { opacity: 1; transform: translateY(0); }
+
+/* ---- Detail Section ---- */
+.detail-section {
+  min-height: 100vh; scroll-snap-align: start;
+  position: relative; overflow: hidden;
+  padding: 140px 64px 100px;
+}
+.detail-section.white { background: #151310; }
+.detail-section.yellow { background: #141210; }
+.detail-section.red { background: #130E0D; }
+.detail-section.black { background: #0E0D0D; }
+.detail-section.green { background: #101211; }
+.detail-section.blue { background: #0F1013; }
+
+.detail-hero {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+  align-items: center; max-width: 1100px; margin: 0 auto 100px;
+}
+.detail-swatch {
+  width: 100%; aspect-ratio: 4/5; border-radius: 4px;
+  position: relative; overflow: hidden; cursor: pointer;
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  outline: 1px solid rgba(249,245,235,0.08);
+  outline-offset: -1px;
+}
+.detail-swatch.in { opacity: 1; transform: translateX(0); }
+.detail-info {
+  opacity: 0; transform: translateX(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.detail-info.in { opacity: 1; transform: translateX(0); }
+.detail-label {
+  font-size: 0.66rem; letter-spacing: 0.2em; color: var(--gold);
+  display: block; margin-bottom: 16px;
+}
+.detail-name {
+  font-size: 3rem; font-weight: 900; letter-spacing: 0.04em; margin-bottom: 6px;
+}
+.detail-academic {
+  font-size: 0.85rem; color: rgba(249,245,235,0.3); letter-spacing: 0.08em; margin-bottom: 10px;
+}
+.detail-code {
+  font-size: 0.7rem; color: rgba(249,245,235,0.2); letter-spacing: 0.06em; margin-bottom: 28px;
+}
+.detail-values {
+  display: grid; grid-template-columns: auto 1fr; gap: 10px 20px;
+  font-size: 0.82rem; color: rgba(249,245,235,0.5);
+}
+.detail-values dt { color: rgba(249,245,235,0.25); }
+.detail-values dd { font-family: 'Cormorant Garamond', 'Georgia', serif; letter-spacing: 0.04em; }
+.detail-weight-badge {
+  display: inline-block; margin-top: 20px; padding: 6px 18px;
+  border: 1px solid rgba(249,245,235,0.1); border-radius: 20px;
+  font-size: 0.72rem; color: var(--gold); letter-spacing: 0.06em;
+}
+
+/* ---- Sub-section labels ---- */
+.detail-block {
+  max-width: 1100px; margin: 0 auto 80px;
+}
+.detail-block-label {
+  font-size: 0.66rem; letter-spacing: 0.2em; color: var(--gold);
+  margin-bottom: 32px; display: flex; align-items: center; gap: 16px;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.detail-block-label.in { opacity: 1; transform: translateY(0); }
+.detail-block-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(201,160,132,0.3), transparent);
+}
+
+/* ---- Pigment text ---- */
+.pigment-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+  align-items: start;
+}
+.pigment-text {
+  font-size: 0.88rem; line-height: 2.1; color: rgba(249,245,235,0.45);
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.pigment-text.in { opacity: 1; transform: translateY(0); }
+.pigment-text em { color: var(--gold); font-style: normal; }
+.pigment-image {
+  width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 4px;
+  filter: brightness(0.5); border: 1px solid rgba(249,245,235,0.06);
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+}
+.pigment-image.in { opacity: 1; transform: translateY(0); }
+
+/* ---- A1-A4 Swatches ---- */
+.aux-row {
+  display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+}
+.aux-card {
+  flex: 1 1 0; max-width: 200px; min-width: 120px; text-align: center;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.aux-card.in { opacity: 1; transform: translateY(0); }
+.aux-card.aux-few { max-width: 300px; }
+.aux-card-block {
+  width: 100%; height: 180px; border-radius: 4px; margin-bottom: 14px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  outline: 1px solid rgba(249,245,235,0.06);
+  outline-offset: -1px;
+}
+.aux-card.aux-few .aux-card-block { height: 220px; }
+.aux-card:hover .aux-card-block {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+.aux-card-name {
+  font-size: 0.95rem; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 4px;
+}
+.aux-card-hex {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 0.72rem; color: rgba(249,245,235,0.3); letter-spacing: 0.04em;
+}
+.aux-card-id {
+  font-size: 0.6rem; color: rgba(249,245,235,0.15); letter-spacing: 0.08em;
+}
+
+/* ---- E-Series Grid ---- */
+.e-grid {
+  display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px;
+  max-width: 800px; margin: 0 auto;
+}
+.e-ticket {
+  aspect-ratio: 1; border-radius: 2px; cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, z-index 0s;
+  position: relative;
+  outline: 1px solid rgba(249,245,235,0.04);
+  outline-offset: -1px;
+}
+.e-ticket:hover {
+  transform: scale(1.8); z-index: 5;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.e-ticket-tip {
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: rgba(15,13,11,0.9); color: #F9F5EB;
+  font-size: 0.6rem; padding: 3px 8px; border-radius: 3px;
+  white-space: nowrap; pointer-events: none; opacity: 0;
+  transition: opacity 0.2s;
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  letter-spacing: 0.04em;
+}
+.e-ticket:hover .e-ticket-tip { opacity: 1; }
+
+/* ---- Mural Strip ---- */
+.mural-strip {
+  display: flex; gap: 20px; overflow-x: auto;
+  padding: 10px 0 20px; justify-content: center;
+  scrollbar-width: none;
+}
+.mural-strip::-webkit-scrollbar { display: none; }
+.mural-strip img {
+  height: 280px; width: 380px; border-radius: 4px; object-fit: cover;
+  border: 2px solid rgba(249,245,235,0.08);
+  flex-shrink: 0; transition: border-color 0.4s;
+}
+.mural-strip img:hover { border-color: var(--gold); }
+
+/* ---- Tool banner ---- */
+.tool-banner {
+  text-align: center; padding: 120px 48px;
+  border-top: 1px solid rgba(249,245,235,0.04);
+}
+.tool-banner a {
+  display: inline-block; padding: 16px 48px;
+  border: 1px solid rgba(201,160,132,0.3);
+  color: var(--gold); text-decoration: none;
+  font-size: 0.85rem; letter-spacing: 0.1em;
+  border-radius: 2px; transition: all 0.4s;
+}
+.tool-banner a:hover {
+  background: rgba(201,160,132,0.06);
+  border-color: var(--gold);
+}
+.tool-banner p {
+  margin-top: 20px; font-size: 0.72rem; color: rgba(249,245,235,0.25);
+  letter-spacing: 0.06em;
+}
+
+/* ---- Footer ---- */
+.colors-footer {
+  text-align: center; padding: 48px;
+  border-top: 1px solid rgba(249,245,235,0.03);
+  font-size: 0.62rem; color: rgba(249,245,235,0.12); letter-spacing: 0.04em;
+  line-height: 2;
+}
+.colors-footer .footer-strip {
+  display: flex; height: 3px; width: 140px; border-radius: 2px;
+  overflow: hidden; margin: 0 auto 16px;
+}
+.colors-footer .footer-strip span { flex: 1; }
+
+/* ---- Scroll hint (when landing on detail via hash) ---- */
+.scroll-hint {
+  position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%);
+  z-index: 200; font-size: 0.65rem; letter-spacing: 0.2em;
+  color: rgba(249,245,235,0.2); opacity: 0; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: opacity 0.6s ease;
+}
+.scroll-hint.visible { opacity: 1; }
+.scroll-hint .hint-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* ---- Back to top ---- */
+.back-top {
+  position: fixed; bottom: 40px; right: 40px; z-index: 200;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid rgba(249,245,235,0.1);
+  background: rgba(15,13,11,0.6);
+  color: rgba(249,245,235,0.3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.4s;
+  opacity: 0; pointer-events: none; text-decoration: none;
+}
+.back-top.visible { opacity: 1; pointer-events: auto; }
+.back-top:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .overview-strip { flex-wrap: wrap; }
+  .overview-bar { flex: 0 0 33.333%; height: 50vh; }
+  .detail-section { padding: 100px 24px 60px; }
+  .detail-hero { grid-template-columns: 1fr; gap: 40px; }
+  .detail-swatch { aspect-ratio: 3/2; }
+  .pigment-grid { grid-template-columns: 1fr; }
+  .aux-row { gap: 12px; }
+  .aux-card { max-width: 160px; min-width: 80px; }
+  .aux-card.aux-few { max-width: 220px; }
+  .aux-card-block { height: 130px; }
+  .aux-card.aux-few .aux-card-block { height: 160px; }
+  .e-grid { grid-template-columns: repeat(5, 1fr); }
+  .mural-strip img { height: 180px; width: 240px; }
+  .back-top { bottom: 20px; right: 20px; }
+}
+
+/* ---- Copy toast ---- */
+.copy-toast {
+  position: fixed; z-index: 300;
+  background: rgba(15,13,11,0.92);
+  border: 1px solid rgba(201,160,132,0.3);
+  color: var(--gold); font-size: 0.68rem;
+  padding: 6px 14px; border-radius: 4px;
+  letter-spacing: 0.08em; pointer-events: none;
+  opacity: 0; transform: translate(-50%, -8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.copy-toast.show { opacity: 1; transform: translate(-50%, -16px); }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas class="global-canvas" id="globalCanvas"></canvas>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-dots">
+    <span style="background:#E6E3D8"></span>
+    <span style="background:#C9BDA4"></span>
+    <span style="background:#9E5C4A"></span>
+    <span style="background:#2B2124"></span>
+    <span style="background:#86998A"></span>
+    <span style="background:#687597"></span>
+  </div>
+  <p class="loader-title">色彩系统</p>
+  <div class="loader-line"></div>
+  <button class="loader-hint">点击探索</button>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="dhp.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
+  <ul class="nav-links">
+    <li><a href="colors.html" style="color:#fff">色彩系统</a></li>
+    <li><a href="color-exploration.html">色彩探索</a></li>
+    <li><a href="education.html">美育课程</a></li>
+    <li><a href="research.html">色彩溯源</a></li>
+    <li class="nav-coming"><a href="#">敬请期待</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="菜单"><span></span><span></span></button>
+</nav>
+
+<!-- ============================================================
+     SECTION 1 · 六色总览
+     ============================================================ -->
+<section class="overview-strip" id="overviewStrip">
+  <!-- Generated by JS -->
+</section>
+
+<!-- ============================================================
+     SECTIONS 2-7 · 六色详情 (generated by JS)
+     ============================================================ -->
+<div id="detailContainer"></div>
+
+<!-- ============================================================
+     TOOLS LINK
+     ============================================================ -->
+<div class="tool-banner">
+  <a href="color-exploration.html">进入色彩探索 &#8594;</a>
+  <p>配色方案 · 对比度检测 · 图像取色 · 敦煌配色 · 色票导出</p>
+</div>
+
+<!-- Footer -->
+<footer class="colors-footer">
+  <div class="footer-strip">
+    <span style="background:#E6E3D8"></span><span style="background:#C9BDA4"></span><span style="background:#9E5C4A"></span><span style="background:#2B2124"></span><span style="background:#86998A"></span><span style="background:#687597"></span>
+  </div>
+  Copyright &copy; 2025–2026 School of Future Design, BNU
+</footer>
+
+<!-- Scroll hint -->
+<div class="scroll-hint" id="scrollHint">
+  <span>SCROLL</span>
+  <div class="hint-line"></div>
+</div>
+
+<!-- Back to top -->
+<a href="#overviewStrip" class="back-top" id="backTop" title="返回总览">&#9650;</a>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="js/color-data.js"></script>
+<script src="js/common.js"></script>
+<script>
+(function(){
+
+// ============================================================
+// BUILD OVERVIEW STRIP
+// ============================================================
+var strip = document.getElementById('overviewStrip');
+
+DUNHUANG_COLORS.forEach(function(c, i) {
+  var hasGradient = c.hex !== c.eduHex;
+  var bgStyle = hasGradient
+    ? 'background:linear-gradient(180deg,' + c.hex + ' 0%,' + c.hex + ' 32%,' + c.eduHex + ' 68%,' + c.eduHex + ' 100%)'
+    : 'background:' + c.hex;
+  var gradAttr = hasGradient
+    ? 'linear-gradient(180deg,' + c.hex + ' 0%,' + c.hex + ' 32%,' + c.eduHex + ' 68%,' + c.eduHex + ' 100%)'
+    : 'linear-gradient(180deg,' + c.hex + ' 0%,' + c.hex + ' 100%)';
+
+  var bar = document.createElement('a');
+  bar.className = 'overview-bar';
+  bar.href = '#detail-' + c.id;
+  bar.style.cssText = bgStyle + ';color:#F9F5EB';
+  bar.setAttribute('data-delay', (i * 0.08).toFixed(2));
+  bar.setAttribute('data-gradient', gradAttr);
+
+  var detailText = hasGradient
+    ? c.hex + ' → ' + c.eduHex + ' · ' + c.weight + '%'
+    : c.hex + ' · ' + c.weight + '%';
+
+  bar.innerHTML =
+    '<div class="overview-bar-inner">' +
+      '<span class="overview-bar-chapter">' + c.chapterName + '</span>' +
+      '<span class="overview-bar-dash">—</span>' +
+      '<span class="overview-bar-name">' + c.displayName + '</span>' +
+      '<span class="overview-bar-code">' + c.code + '</span>' +
+    '</div>' +
+    '<div class="overview-bar-detail" style="color:rgba(249,245,235,0.55)">' + detailText + '<br>' + c.category + '</div>';
+
+  strip.appendChild(bar);
+});
+
+// ============================================================
+// BUILD DETAIL SECTIONS
+// ============================================================
+var container = document.getElementById('detailContainer');
+
+var pigmentTexts = {
+  white: '敦煌白源于壁画基底所用的石灰（碳酸钙）与高岭土。<em>《本草纲目》</em>载："石灰，辛温有毒，止血生肌。"在敦煌壁画中，石灰不仅是颜料载体，更是色彩系统的<em>呼吸基底</em>。历经千年氧化，石灰底由纯白渐变为温润的灰白，形成独特的"时间色调"——这种微妙的暖灰白承载了整壁色彩，是敦煌视觉体系的底色与基调。',
+  yellow: '煌金色系源于<em>赭石（铁氧化物）</em>与黄土。敦煌地处戈壁，黄土与赭石是最易得的天然矿物颜料。<em>《本草纲目》</em>载赭石"气味苦寒无毒"，以甘肃、山西所产为佳。壁画中的暖黄调广泛见于佛衣、建筑装饰与背景铺陈，是敦煌色彩体系中占比最高的暖色，赋予壁画以大地般的温度。',
+  red: '铅丹系敦煌壁画中最核心的红色。<em>《本草纲目》</em>载："铅丹，辛微寒无毒，主吐逆胃反，杀虫。"铅丹（Pb₃O₄）与朱砂（HgS）混合使用，形成敦煌特有的<em>暖红色系</em>。壁画中佛像袈裟、飞天飘带、装饰纹样皆以铅丹为主色。然而铅丹易氧化变黑，许多壁画中的红色历经千年已转为棕褐——这种"时间的变色"本身也是敦煌色彩叙事的一部分。',
+  black: '墨玄色系以<em>碳黑（墨）</em>与氧化铁黑为主。<em>《本草纲目》</em>载墨"辛温无毒，止血生肌"。敦煌壁画中，墨线是"骨"——先以墨线勾勒轮廓，再填以重彩。墨玄微泛红调的深邃黑色，源于碳黑中混入的微量氧化铁，使线条不仅是分界，更是一种独立的色彩语言，构成敦煌<em>线面色彩结构</em>的根基。',
+  green: '石绿色系以<em>孔雀石（碱式碳酸铜）</em>为主。<em>《本草纲目》</em>载："绿青，即石绿也。生山石穴中，色青白，可画。"石绿与氯铜矿一起，为敦煌壁画提供了稀缺的冷色来源。虽在整体色彩中占比不到5%，但绿色飘带、植物纹样与天界装饰起到<em>关键的冷暖平衡作用</em>——没有石绿，敦煌壁画的色彩将失去呼吸。',
+  blue: '石青色系源于<em>青金石（天然群青）</em>，经丝绸之路自阿富汗万里而来。<em>《本草纲目》</em>载："青金石，色如天，可磨以为画。"青金石在敦煌壁画中是最珍贵的颜料，象征天界与佛国。因价格昂贵，石青多用于佛像背光、天宫藻井等核心位置，是敦煌色彩系统中<em>小而精的点睛之色</em>。'
+};
+
+DUNHUANG_COLORS.forEach(function(c) {
+  var section = document.createElement('section');
+  section.className = 'detail-section ' + c.id;
+  section.id = 'detail-' + c.id;
+
+  var auxColors = AUXILIARY_COLORS[c.id] || [];
+  var eColors = E_SERIES[c.id] || [];
+  var muralImages = MURAL_IMAGES[c.id] || [];
+
+  // Auxiliary swatches HTML
+  var auxHTML = '';
+  var auxFewClass = auxColors.length <= 2 ? ' aux-few' : '';
+  auxColors.forEach(function(a, ai) {
+    var textColor = c.id === 'white' && a.hex === '#FFFFFF' ? '#2B2124' : '#F9F5EB';
+    auxHTML +=
+      '<div class="aux-card' + auxFewClass + '" data-delay="' + (0.1 + ai * 0.1).toFixed(2) + '">' +
+        '<div class="aux-card-block" data-hex="' + a.hex + '" style="background:' + a.hex + '"></div>' +
+        '<div class="aux-card-name" style="color:' + textColor + '">' + a.name + '</div>' +
+        '<div class="aux-card-hex">' + a.hex + '</div>' +
+        '<div class="aux-card-id">' + a.id + '</div>' +
+      '</div>';
+  });
+
+  // E-series tickets HTML — sorted by lightness
+  var eSorted = eColors.slice().sort(function(a, b) {
+    return relativeLuminance(a) - relativeLuminance(b);
+  });
+  var eHTML = '';
+  eSorted.forEach(function(hex) {
+    var textColor = c.id === 'white' && hex === '#fefefe' ? '#2B2124' : '#F9F5EB';
+    eHTML +=
+      '<div class="e-ticket" style="background:' + hex + '" data-hex="' + hex + '">' +
+        '<span class="e-ticket-tip" style="color:' + textColor + '">' + hex + '</span>' +
+      '</div>';
+  });
+
+  // Mural images HTML
+  var muralHTML = '';
+  muralImages.forEach(function(img) {
+    muralHTML += '<img src="' + img + '" alt="" loading="lazy">';
+  });
+
+  var hasGradient = c.hex !== c.eduHex;
+  var swatchBg = hasGradient
+    ? 'linear-gradient(135deg, ' + c.hex + ' 0%, ' + c.eduHex + ' 100%)'
+    : c.hex;
+
+  section.innerHTML =
+    '<div class="detail-hero">' +
+      '<div class="detail-swatch" data-hex="' + c.hex + '" style="background:' + swatchBg + '"></div>' +
+      '<div class="detail-info">' +
+        '<span class="detail-label">' + c.chapterName + '</span>' +
+        '<h2 class="detail-name">' + c.displayName + '</h2>' +
+        '<p class="detail-academic">' + c.name + '</p>' +
+        '<p class="detail-code">' + c.code + '</p>' +
+        '<dl class="detail-values">' +
+          '<dt>HEX</dt><dd>' + c.hex + (hasGradient ? ' → ' + c.eduHex : '') + '</dd>' +
+          '<dt>LAB</dt><dd>' + c.lab + '</dd>' +
+          '<dt>RGB</dt><dd>' + c.rgb + '</dd>' +
+        '</dl>' +
+        '<span class="detail-weight-badge">占比 ' + c.weight + '%</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="detail-block">' +
+      '<div class="detail-block-label">颜料历史 · Pigment History</div>' +
+      '<div class="pigment-grid">' +
+        '<p class="pigment-text">' + pigmentTexts[c.id] + '</p>' +
+        (muralImages[0] ? '<img class="pigment-image" src="' + muralImages[0] + '" alt="" loading="lazy">' : '<div></div>') +
+      '</div>' +
+    '</div>' +
+
+    '<div class="detail-block">' +
+      '<div class="detail-block-label">辅助色 · Auxiliary Tones</div>' +
+      '<div class="aux-row">' + auxHTML + '</div>' +
+    '</div>' +
+
+    '<div class="detail-block">' +
+      '<div class="detail-block-label">延伸色 · Extended Palette</div>' +
+      '<div class="e-grid">' + eHTML + '</div>' +
+    '</div>' +
+
+    (muralHTML ?
+    '<div class="detail-block">' +
+      '<div class="detail-block-label">壁画实例 · Mural Examples</div>' +
+      '<div class="mural-strip">' + muralHTML + '</div>' +
+    '</div>' : '');
+
+  container.appendChild(section);
+});
+
+// ============================================================
+// INTERSECTION OBSERVER
+// ============================================================
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (!entry.isIntersecting) return;
+
+    var el = entry.target;
+
+    // Overview bars
+    if (el.classList.contains('overview-bar')) {
+      var delay = parseFloat(el.getAttribute('data-delay')) || 0;
+      setTimeout(function() { el.classList.add('in'); }, delay * 1000);
+      observer.unobserve(el);
+    }
+
+    // Detail swatches
+    if (el.classList.contains('detail-swatch')) {
+      el.classList.add('in');
+      var info = el.parentElement.querySelector('.detail-info');
+      if (info) info.classList.add('in');
+    }
+
+    // Detail block labels
+    if (el.classList.contains('detail-block-label')) {
+      el.classList.add('in');
+    }
+
+    // Pigment text & image
+    if (el.classList.contains('pigment-text')) {
+      el.classList.add('in');
+      var img = el.parentElement.querySelector('.pigment-image');
+      if (img) img.classList.add('in');
+    }
+
+    // Aux cards
+    if (el.classList.contains('aux-card')) {
+      var ad = parseFloat(el.getAttribute('data-delay')) || 0;
+      setTimeout(function() { el.classList.add('in'); }, ad * 1000);
+      observer.unobserve(el);
+    }
+  });
+}, { threshold: 0.15 });
+
+// Observe overview bars
+document.querySelectorAll('.overview-bar').forEach(function(bar) {
+  observer.observe(bar);
+});
+
+// Observe detail sections
+var detailObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (!entry.isIntersecting) return;
+    var section = entry.target;
+
+    // Swatch + info
+    var swatch = section.querySelector('.detail-swatch');
+    if (swatch) {
+      observer.observe(swatch);
+    }
+
+    // Block labels
+    section.querySelectorAll('.detail-block-label').forEach(function(label) {
+      observer.observe(label);
+    });
+
+    // Pigment
+    var pigmentText = section.querySelector('.pigment-text');
+    if (pigmentText) observer.observe(pigmentText);
+
+    // Aux cards
+    section.querySelectorAll('.aux-card').forEach(function(card) {
+      observer.observe(card);
+    });
+
+    detailObserver.unobserve(section);
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.detail-section').forEach(function(section) {
+  detailObserver.observe(section);
+});
+
+// ============================================================
+// CLICK-TO-COPY — all color blocks
+// ============================================================
+container.addEventListener('click', function(e) {
+  var ticket = e.target.closest('.e-ticket');
+  var auxCard = e.target.closest('.aux-card');
+  var swatch = e.target.closest('.detail-swatch');
+
+  var hex, targetEl;
+  if (ticket) {
+    hex = ticket.getAttribute('data-hex');
+    targetEl = ticket;
+  } else if (auxCard) {
+    var block = auxCard.querySelector('.aux-card-block');
+    if (block) { hex = block.getAttribute('data-hex'); targetEl = block; }
+  } else if (swatch) {
+    hex = swatch.getAttribute('data-hex');
+    targetEl = swatch;
+  }
+  if (!hex) return;
+
+  flashElement(targetEl);
+  showToast(targetEl, hex);
+
+  // Try Clipboard API first, fallback to execCommand
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(hex).catch(function() {});
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = hex; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    ta.remove();
+  }
+});
+
+function flashElement(el) {
+  if (!el) return;
+  el.style.transition = 'outline 0.15s ease';
+  el.style.outline = '2px solid var(--gold)';
+  el.style.outlineOffset = '2px';
+  setTimeout(function() {
+    el.style.outline = '';
+    el.style.outlineOffset = '';
+    setTimeout(function() { el.style.transition = ''; }, 150);
+  }, 250);
+}
+
+function showToast(el, hex) {
+  if (!el) return;
+  var toast = document.createElement('div');
+  toast.className = 'copy-toast';
+  toast.textContent = hex + '  已复制';
+  document.body.appendChild(toast);
+
+  var rect = el.getBoundingClientRect();
+  toast.style.left = (rect.left + rect.width / 2) + 'px';
+  toast.style.top = rect.top + 'px';
+
+  requestAnimationFrame(function() {
+    toast.classList.add('show');
+  });
+
+  setTimeout(function() {
+    toast.classList.remove('show');
+    setTimeout(function() { toast.remove(); }, 300);
+  }, 1200);
+}
+
+// ============================================================
+// SCROLL HINT (when landing on a detail section via hash)
+// ============================================================
+var scrollHint = document.getElementById('scrollHint');
+var landedOnDetail = window.location.hash && /^#detail-/.test(window.location.hash);
+
+if (landedOnDetail) {
+  setTimeout(function() {
+    scrollHint.classList.add('visible');
+  }, 1200);
+
+  var hintHidden = false;
+  window.addEventListener('scroll', function() {
+    if (!hintHidden && window.scrollY > window.innerHeight * 0.3) {
+      hintHidden = true;
+      scrollHint.classList.remove('visible');
+    }
+  });
+}
+
+// ============================================================
+// BACK TO TOP
+// ============================================================
+var backTop = document.getElementById('backTop');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > window.innerHeight) {
+    backTop.classList.add('visible');
+  } else {
+    backTop.classList.remove('visible');
+  }
+});
+
+// ============================================================
+// MOUSE GLOW ON OVERVIEW BARS
+// ============================================================
+function updateBarGlow(e) {
+  var strip = document.getElementById('overviewStrip');
+  var rect = strip.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+  strip.querySelectorAll('.overview-bar').forEach(function(bar) {
+    var br = bar.getBoundingClientRect();
+    var relX = ((e.clientX - br.left) / br.width) * 100;
+    var relY = ((e.clientY - br.top) / br.height) * 100;
+    var baseGrad = bar.getAttribute('data-gradient') || '';
+    if (relX >= 0 && relX <= 100 && relY >= 0 && relY <= 100) {
+      bar.style.backgroundImage = 'radial-gradient(circle at ' + relX + '% ' + relY + '%, rgba(255,255,255,0.06) 0%, transparent 50%)' + (baseGrad ? ', ' + baseGrad : '');
+    } else {
+      bar.style.backgroundImage = baseGrad;
+    }
+  });
+}
+
+DHP.onMouseMove = function(e) {
+  updateBarGlow(e);
+};
+
+// ============================================================
+// LOADER & ENTRY ANIMATION
+// ============================================================
+function animateEntry() {
+  // Animate overview bars sequentially
+  var bars = document.querySelectorAll('.overview-bar');
+  bars.forEach(function(bar) {
+    var delay = parseFloat(bar.getAttribute('data-delay')) || 0;
+    setTimeout(function() { bar.classList.add('in'); }, 200 + delay * 1000);
+  });
+}
+
+DHP.initLoader(animateEntry);
+
+})();
+</script>
+</body>
+</html>

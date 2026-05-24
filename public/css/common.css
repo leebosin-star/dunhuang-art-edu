@@ -1,0 +1,158 @@
+/* ============================================================
+   DHP · Common Styles — 全站共享
+   ============================================================ */
+
+:root {
+  --bg:#0F0D0B; --text:#F9F5EB; --gold:#C9A084;
+  --white:#E6E3D8; --yellow:#C9BDA4; --red:#9E5C4A;
+  --black:#2B2124; --green:#86998A; --blue:#687597;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:"Noto Serif SC","STSong","SimSun",serif;
+  background:var(--bg); color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  cursor:none;
+  overflow-x:hidden;
+}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor-dot {
+  position:fixed; pointer-events:none; z-index:400;
+  width:6px; height:6px; border-radius:50%;
+  background:var(--gold);
+  transform:translate(-50%,-50%);
+  transition:transform 0.12s ease-out,width 0.2s,height 0.2s,background 0.2s;
+  opacity:0;
+}
+.cursor-dot.visible { opacity:1; }
+.cursor-dot.clicking { transform:translate(-50%,-50%) scale(0.5); }
+.cursor-ring {
+  position:fixed; pointer-events:none; z-index:399;
+  width:30px; height:30px; border-radius:50%;
+  border:1px solid rgba(201,160,132,0.35);
+  transform:translate(-50%,-50%);
+  transition:width 0.3s ease,height 0.3s ease,border-color 0.3s ease,opacity 0.3s;
+  opacity:0;
+}
+.cursor-ring.visible { opacity:1; }
+.cursor-ring.hover {
+  width:52px; height:52px;
+  border-color:rgba(201,160,132,0.7);
+  background:rgba(201,160,132,0.04);
+}
+
+/* ============================================================
+   LOADING SCREEN
+   ============================================================ */
+#loader {
+  position:fixed; inset:0; z-index:999;
+  background:var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column;
+  transition:opacity 0.8s ease;
+  cursor:pointer;
+}
+#loader.fade-out { opacity:0; pointer-events:none; }
+#loader .loader-dots {
+  display:flex; gap:14px; margin-bottom:48px;
+}
+#loader .loader-dots span {
+  width:8px; height:8px; border-radius:50%;
+  opacity:0;
+}
+#loader .loader-title {
+  font-size:clamp(1.6rem,3vw,2.2rem);
+  font-weight:300; letter-spacing:0.15em;
+  color:rgba(249,245,235,0.5);
+  opacity:0;
+}
+#loader .loader-line {
+  width:0; height:1px; background:var(--gold);
+  margin:28px auto 0; opacity:0;
+}
+#loader .loader-hint {
+  margin-top:40px; font-size:0.72rem;
+  letter-spacing:0.2em; color:rgba(249,245,235,0.25);
+  opacity:0; cursor:pointer; background:none; border:none;
+  font-family:inherit;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:28px 48px; display:flex; align-items:center; justify-content:space-between;
+  mix-blend-mode:difference; pointer-events:none;
+  opacity:0; transition:opacity 0.8s ease;
+}
+.nav.visible { opacity:1; }
+.nav>*{pointer-events:auto;}
+.nav-logo{font-size:0.78rem;font-weight:600;letter-spacing:0.12em;color:#fff;text-decoration:none;}
+.nav-links{display:flex;gap:40px;list-style:none;}
+.nav-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.74rem;letter-spacing:0.1em;transition:color 0.4s;}
+.nav-links a:hover{color:#fff;}
+.nav-links .nav-coming a{color:rgba(255,255,255,0.14);font-size:0.7rem;cursor:default;}
+.nav-links .nav-coming a:hover{color:rgba(255,255,255,0.22);}
+.nav-links .nav-coming::after{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--gold);margin-left:8px;opacity:0.5;animation:dotPulse 2s ease-in-out infinite;vertical-align:middle;}
+@keyframes dotPulse{0%,100%{opacity:0.2;}50%{opacity:0.7;}}
+
+/* ============================================================
+   CANVAS
+   ============================================================ */
+.global-canvas { position:fixed; inset:0; z-index:50; pointer-events:none; }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes scrollPulse {
+  0%,100% { opacity:0.3; transform:scaleY(0.6); }
+  50% { opacity:0.8; transform:scaleY(1); }
+}
+
+/* ============================================================
+   MOBILE NAV
+   ============================================================ */
+.nav-hamburger {
+  display:none; flex-direction:column; gap:5px;
+  background:none; border:none; padding:4px;
+  cursor:pointer; z-index:102; pointer-events:auto;
+}
+.nav-hamburger span {
+  display:block; width:22px; height:1px;
+  background:#fff; transition:transform 0.3s ease;
+}
+.nav-hamburger.open span:nth-child(1) { transform:translateY(6px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { transform:translateY(-6px) rotate(-45deg); }
+
+.mobile-menu {
+  position:fixed; inset:0; z-index:98;
+  background:rgba(15,13,11,0.96);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:36px;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.4s ease;
+}
+.mobile-menu.open { opacity:1; pointer-events:auto; }
+.mobile-menu a {
+  font-size:1.3rem; letter-spacing:0.1em;
+  color:rgba(249,245,235,0.4); text-decoration:none;
+  transition:color 0.3s;
+}
+.mobile-menu a:active, .mobile-menu a.current { color:#fff; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:768px){
+  body { cursor:crosshair; }
+  .cursor-dot, .cursor-ring { display:none !important; }
+  .nav { padding:18px 24px; }
+  .nav-links { display:none; }
+  .nav-hamburger { display:flex; }
+}

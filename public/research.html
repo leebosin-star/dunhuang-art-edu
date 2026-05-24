@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DHP · 色彩溯源</title>
+<meta name="description" content="从117幅敦煌复原壁画出发，通过计算提取凝练为六个核心敦煌色。北京师范大学未来设计学院 × 敦煌研究院。">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+SC:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<style>
+/* ============================================================
+   DHP · 色彩溯源 — 壁画浮现 → 粒子汇聚 → 六色呈现 → 步骤详解
+   ============================================================ */
+
+html { scroll-snap-type: none; background:#0F0D0B; }
+
+/* ---- Animation Stage ---- */
+.anim-stage {
+  position:relative; height:100vh; overflow:hidden;
+  background:#0F0D0B;
+}
+
+/* Mural grid — 117 images, 13 columns */
+.mural-grid {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  display:grid; grid-template-columns:repeat(13, 1fr);
+  gap:clamp(2px, 0.4vw, 4px);
+  width:clamp(320px, 75vw, 900px);
+  z-index:1; opacity:0; transition:opacity 1.2s ease;
+}
+.mural-grid.visible { opacity:1; }
+.mural-grid.fading { opacity:0; transition:opacity 1.0s ease; }
+.mural-cell {
+  aspect-ratio:1; border-radius:2px; overflow:hidden;
+  background-size:cover; background-position:center;
+  opacity:0; transform:scale(0.85);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+  border:1px solid rgba(249,245,235,0.03);
+}
+.mural-cell.in { opacity:0.55; transform:scale(1); }
+
+/* Particle canvas */
+#particleCanvas {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  z-index:55; pointer-events:none;
+}
+
+/* Text overlays */
+.anim-texts {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  z-index:56; pointer-events:none;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(10px, 2vh, 20px);
+}
+.at-phase {
+  font-weight:700; letter-spacing:0.06em; text-align:center;
+  opacity:0; transform:translateY(12px);
+  transition:opacity 0.6s ease, transform 0.6s ease;
+  padding:0 24px;
+  text-shadow:0 2px 12px rgba(15,13,11,0.85);
+}
+.at-phase.show { opacity:1; transform:translateY(0); }
+.at-phase.p1 { font-size:clamp(1.4rem, 3vw, 2.4rem); color:#F9F5EB; }
+.at-phase.p2 { font-size:clamp(1rem, 1.8vw, 1.3rem); color:rgba(249,245,235,0.7); }
+.at-phase.p3 { font-size:clamp(1.3rem, 2.5vw, 2rem); color:var(--gold); }
+.at-phase.p4 {
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:clamp(2rem, 5vw, 4.5rem); font-weight:200; font-style:italic;
+  color:rgba(249,245,235,0.06);
+}
+.at-phase.p5 {
+  font-size:clamp(0.75rem, 1vw, 0.85rem); font-weight:400;
+  color:rgba(249,245,235,0.25); letter-spacing:0.2em;
+}
+.at-phase.p6 {
+  margin-top:clamp(16px, 4vh, 36px);
+  font-size:clamp(1rem, 1.6vw, 1.3rem); font-weight:600;
+  color:var(--gold); letter-spacing:0.08em;
+}
+
+/* 6-color result cards */
+.anim-cards {
+  position:absolute; bottom:clamp(40px, 8vh, 80px); left:50%; transform:translateX(-50%);
+  z-index:57; display:flex; gap:clamp(8px, 1.6vw, 16px);
+  opacity:0; transition:opacity 0.7s ease;
+  pointer-events:none;
+}
+.anim-cards.visible { opacity:1; pointer-events:auto; }
+.ac-card {
+  background:rgba(20,17,14,0.65); border:1px solid rgba(249,245,235,0.05);
+  border-radius:6px; padding:clamp(12px, 1.6vw, 18px) clamp(8px, 1.2vw, 14px);
+  text-align:center; min-width:clamp(70px, 11vw, 120px);
+  opacity:0; transform:translateY(16px);
+  transition:opacity 0.5s ease, transform 0.5s ease, border-color 0.4s;
+  cursor:default;
+}
+.anim-cards.visible .ac-card { opacity:1; transform:translateY(0); }
+.ac-card:nth-child(1) { transition-delay:0s; }
+.ac-card:nth-child(2) { transition-delay:0.06s; }
+.ac-card:nth-child(3) { transition-delay:0.12s; }
+.ac-card:nth-child(4) { transition-delay:0.18s; }
+.ac-card:nth-child(5) { transition-delay:0.24s; }
+.ac-card:nth-child(6) { transition-delay:0.30s; }
+.ac-card:hover { border-color:rgba(201,160,132,0.22); }
+.ac-card .ac-dot {
+  width:clamp(24px, 3.5vw, 40px); height:clamp(24px, 3.5vw, 40px);
+  border-radius:50%; margin:0 auto 8px;
+  border:2px solid rgba(249,245,235,0.08);
+}
+.ac-card .ac-name { font-size:clamp(0.65rem, 0.9vw, 0.8rem); font-weight:600; letter-spacing:0.04em; }
+.ac-card .ac-pct {
+  font-size:clamp(0.9rem, 1.3vw, 1.2rem); font-weight:200;
+  color:var(--gold); letter-spacing:0.03em; margin-top:2px;
+}
+
+/* ============================================================
+   DETAIL SECTION
+   ============================================================ */
+.detail-wrap {
+  position:relative; background:#0F0D0B;
+  padding:clamp(60px, 10vh, 120px) 0;
+  z-index:60;
+}
+.detail-inner { max-width:760px; margin:0 auto; padding:0 40px; }
+
+.detail-header {
+  text-align:center; margin-bottom:clamp(48px, 8vh, 80px);
+}
+.detail-header-label {
+  font-size:0.66rem; letter-spacing:0.2em; color:var(--gold);
+  display:block; margin-bottom:16px;
+}
+.detail-header-title {
+  font-size:clamp(1.3rem, 2.2vw, 1.8rem); font-weight:700; letter-spacing:0.05em;
+  margin-bottom:12px;
+}
+.detail-header-desc {
+  font-size:0.82rem; color:rgba(249,245,235,0.3); line-height:1.9;
+  max-width:520px; margin:0 auto;
+}
+
+/* Step cards */
+.step-list { display:flex; flex-direction:column; gap:clamp(48px, 9vh, 90px); }
+
+.step-item {
+  display:grid; grid-template-columns:100px 1fr;
+  gap:clamp(24px, 5vw, 44px); align-items:start;
+  opacity:0; transform:translateY(30px);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+.step-item.in { opacity:1; transform:translateY(0); }
+
+.step-visual {
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.step-num-ring {
+  width:64px; height:64px; border-radius:50%;
+  border:1px solid rgba(201,160,132,0.18);
+  display:flex; align-items:center; justify-content:center;
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:1.4rem; font-weight:200;
+  color:var(--gold); letter-spacing:0.02em;
+}
+.step-icon {
+  font-size:1.6rem; opacity:0.25;
+}
+
+.step-body { padding-top:4px; }
+.step-name {
+  font-size:1.1rem; font-weight:600; letter-spacing:0.05em; margin-bottom:4px;
+}
+.step-metaphor {
+  font-size:0.72rem; color:var(--gold); opacity:0.45;
+  letter-spacing:0.06em; margin-bottom:16px; display:block;
+  font-style:italic;
+}
+.step-desc {
+  font-size:0.82rem; line-height:2.1; color:rgba(249,245,235,0.38);
+  max-width:520px;
+}
+.step-desc strong { color:rgba(249,245,235,0.6); font-weight:500; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.research-footer {
+  position:relative; z-index:60; background:#0F0D0B;
+  border-top:1px solid rgba(249,245,235,0.04);
+  text-align:center; padding:clamp(60px, 12vh, 120px) 40px;
+}
+.footer-inner { max-width:640px; margin:0 auto; }
+.footer-strip {
+  display:flex; height:3px; width:140px; border-radius:2px;
+  overflow:hidden; margin:0 auto 20px;
+}
+.footer-strip span { flex:1; }
+.footer-title {
+  font-size:1.2rem; font-weight:600; letter-spacing:0.06em; margin-bottom:16px;
+}
+.footer-text {
+  font-size:0.82rem; line-height:2.1; color:rgba(249,245,235,0.3);
+  margin-bottom:32px;
+}
+.footer-logos {
+  display:flex; align-items:center; justify-content:center; gap:28px;
+  flex-wrap:wrap;
+}
+.footer-logos span {
+  font-size:0.78rem; letter-spacing:0.08em; color:rgba(249,245,235,0.22);
+  font-weight:500; line-height:1.8;
+}
+.footer-divider { width:1px; height:18px; background:rgba(249,245,235,0.06); }
+.footer-copy {
+  margin-top:28px; font-size:0.6rem; color:rgba(249,245,235,0.1);
+  letter-spacing:0.04em;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:768px){
+  .mural-grid { grid-template-columns:repeat(9,1fr); width:96vw; gap:1px; }
+  .step-item { grid-template-columns:1fr; gap:16px; }
+  .step-visual { flex-direction:row; }
+  .step-num-ring { width:48px; height:48px; font-size:1.1rem; }
+  .anim-cards { flex-wrap:wrap; justify-content:center; bottom:28px; gap:5px; }
+  .ac-card { min-width:58px; padding:8px 5px; }
+  .ac-card .ac-dot { width:18px; height:18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas class="global-canvas" id="globalCanvas"></canvas>
+
+<!-- Loading Screen -->
+<div id="loader">
+  <div class="loader-dots">
+    <span style="background:#E6E3D8"></span><span style="background:#C9BDA4"></span><span style="background:#9E5C4A"></span><span style="background:#2B2124"></span><span style="background:#86998A"></span><span style="background:#687597"></span>
+  </div>
+  <p class="loader-title">色彩溯源</p>
+  <div class="loader-line"></div>
+  <button class="loader-hint">点击探索</button>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="dhp.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
+  <ul class="nav-links">
+    <li><a href="colors.html">色彩系统</a></li>
+    <li><a href="color-exploration.html">色彩探索</a></li>
+    <li><a href="education.html">美育课程</a></li>
+    <li><a href="research.html" style="color:#fff">色彩溯源</a></li>
+    <li class="nav-coming"><a href="#">敬请期待</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="菜单"><span></span><span></span></button>
+</nav>
+
+<!-- ============================================================
+     ANIMATION STAGE
+     ============================================================ -->
+<section class="anim-stage" id="animStage">
+  <!-- Mural grid (117 images, 13×9) -->
+  <div class="mural-grid" id="muralGrid"></div>
+
+  <!-- Particle canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Text overlays -->
+  <div class="anim-texts" id="animTexts">
+    <p class="at-phase p4" id="atNum">117</p>
+    <p class="at-phase p1" id="atLine1">从 117 幅敦煌复原壁画出发</p>
+    <p class="at-phase p2" id="atLine2">每一幅壁画，都携带着千年的色彩记忆</p>
+    <p class="at-phase p3" id="atLine3">让色彩自己找到彼此，凝练为六</p>
+    <p class="at-phase p5" id="atLine4">SCROLL</p>
+    <p class="at-phase p6" id="atLine5">往下看，色彩是如何提炼的</p>
+  </div>
+
+  <!-- 6-color result cards -->
+  <div class="anim-cards" id="animCards"></div>
+</section>
+
+<!-- ============================================================
+     DETAIL SECTION
+     ============================================================ -->
+<div class="detail-wrap" id="detailWrap">
+  <div class="detail-inner">
+    <div class="detail-header">
+      <span class="detail-header-label">取色路径 · HOW WE FOUND THE COLORS</span>
+      <h2 class="detail-header-title">六个敦煌色是如何提炼的</h2>
+      <p class="detail-header-desc">就像从一大锅汤里分辨出六种主料</p>
+    </div>
+
+    <div class="step-list">
+
+      <!-- Step 1 -->
+      <div class="step-item" id="step1">
+        <div class="step-visual">
+          <div class="step-num-ring">01</div>
+
+        </div>
+        <div class="step-body">
+          <h3 class="step-name">壁画采样</h3>
+          <span class="step-metaphor">—— 就像在海洋里取了一百一十七处水样</span>
+          <p class="step-desc">我们拿到了<strong>117幅</strong>由史伟湘老师修复复原的敦煌壁画高清图像，覆盖从<strong>北凉到元代</strong>的十三个朝代。每一幅画都在同样标准下被采集——无论画幅大小，每幅抽取等量的色彩像素点。最终汇成约<strong>23万个色彩数据点</strong>，就像把海水样本汇集到一个实验室里。</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-item" id="step2">
+        <div class="step-visual">
+          <div class="step-num-ring">02</div>
+
+        </div>
+        <div class="step-body">
+          <h3 class="step-name">换一把尺子</h3>
+          <span class="step-metaphor">—— 人眼看颜色差多少，尺子就该量出差多少</span>
+          <p class="step-desc">计算机原本用 RGB 描述颜色，但这套"尺子"的刻度不均匀——数值差 10 的两个红色，人眼可能看不出区别；但数值差 5 的两个绿色，人眼却觉得差很多。我们换成了一套<strong>按人眼感知校准的色彩空间</strong>（CIE L*a*b*），在这里，<strong>坐标距离 = 人眼感受到的差异</strong>。这一步确保了后续所有计算的准确性。</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-item" id="step3">
+        <div class="step-visual">
+          <div class="step-num-ring">03</div>
+
+        </div>
+        <div class="step-body">
+          <h3 class="step-name">让颜色自己找同伴</h3>
+          <span class="step-metaphor">—— 二十三万个色点，哪些天生就该在一起？</span>
+          <p class="step-desc">把 23 万个色彩数据点撒在 LAB 空间里，它们不是均匀分布的——有些区域密集得像集市，有些区域稀疏得像荒漠。<strong>聚类算法</strong>像一个自动的分组员，反复计算、调整、再分组，让颜色自己找到"最像的一群"。经过多轮迭代，密集区域的中心点就浮出来了——这些中心点，就是壁画里最有代表性的色彩。</p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-item" id="step4">
+        <div class="step-visual">
+          <div class="step-num-ring">04</div>
+
+        </div>
+        <div class="step-body">
+          <h3 class="step-name">归入六色</h3>
+          <span class="step-metaphor">—— 把找出来的颜色，对号入座放进六个抽屉</span>
+          <p class="step-desc">聚类找到了很多颜色族群，但我们的目标不是几十个颜色——<strong>六个</strong>，不多不少。基于<strong>自然色彩系统（NCS）</strong>的六种基础色相理论，我们将聚类结果归入六个色系：白、黄、红、黑、绿、蓝。每个色系里选出一个"代表色"——选谁？看三点：<strong>这个颜色出现了多少次、出现在多少幅不同的画里、它的族群有多凝聚</strong>。三者加权排序，第一名为代表。</p>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-item" id="step5">
+        <div class="step-visual">
+          <div class="step-num-ring">05</div>
+        </div>
+        <div class="step-body">
+          <h3 class="step-name">美育提亮</h3>
+          <span class="step-metaphor">—— 壁画原作沉稳内敛，进入课堂则需要更鲜明</span>
+          <p class="step-desc">从壁画中提取的六色保留了千年沉淀的沉稳质感，但直接用于屏幕和课堂时显得过于灰暗。我们在保持色相本质不变的前提下，适度提高明度与饱和度，让每个颜色在数字媒介和教学材料中更清晰可辨。这六组提亮版色彩，就是全站使用的六个主色。</p>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-item" id="step6">
+        <div class="step-visual">
+          <div class="step-num-ring">06</div>
+        </div>
+        <div class="step-body">
+          <h3 class="step-name">六个颜色，千年敦煌的色谱指纹</h3>
+          <span class="step-metaphor">—— 敦煌自己留下了它们</span>
+          <p class="step-desc">经过反复的稳定性验证，六个颜色最终确定：<strong>窟白（34.7%）沉稳如基底，煌金（22.4%）铺陈暖意，铅丹（20.5%）点燃袈裟与飘带，墨玄（14.2%）勾勒千年线条，石绿（4.7%）与石青（3.6%）点睛佛国天界</strong>。每一种颜色都可以在具体的石窟壁画中找到出处，从北凉的朴拙到元的华彩，六个颜色就是敦煌色彩世界的浓缩指纹。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="research-footer">
+  <div class="footer-inner">
+    <div class="footer-strip">
+      <span style="background:#E6E3D8"></span><span style="background:#C9BDA4"></span><span style="background:#9E5C4A"></span><span style="background:#2B2124"></span><span style="background:#86998A"></span><span style="background:#687597"></span>
+    </div>
+    <p class="footer-title">北京师范大学未来设计学院 × 敦煌研究院</p>
+    <p class="footer-text">敦煌研究院拥有丰富的文化遗产资源与学术研究基础；北京师范大学在教师教育、课程设计领域具有突出优势。双方携手推动"文化遗产 + 美育"的创新范式。</p>
+    <div class="footer-logos">
+      <span>北京师范大学<br>未来设计学院</span>
+      <span class="footer-divider"></span>
+      <span>敦煌研究院</span>
+    </div>
+    <p class="footer-copy">Copyright &copy; 2025–2026 School of Future Design, BNU</p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="js/common.js"></script>
+<script src="js/color-data.js"></script>
+<script>
+(function(){
+
+// ============================================================
+// DOM REFS
+// ============================================================
+var stage = document.getElementById('animStage');
+var muralGrid = document.getElementById('muralGrid');
+var canvas = document.getElementById('particleCanvas');
+var ctx = canvas.getContext('2d');
+var animCards = document.getElementById('animCards');
+
+var atNum = document.getElementById('atNum');
+var atLine1 = document.getElementById('atLine1');
+var atLine2 = document.getElementById('atLine2');
+var atLine3 = document.getElementById('atLine3');
+var atLine4 = document.getElementById('atLine4');
+var atLine5 = document.getElementById('atLine5');
+
+var W, H, dpr;
+
+// ============================================================
+// MURAL GRID — 117 images from all/
+// ============================================================
+var MURAL_SAMPLES = [
+  '020260306_16383971.jpg','020260306_16393866.jpg','020260306_16402441.jpg','020260306_16405385.jpg','020260306_16412852_1.jpg',
+  '020260306_16415000.jpg','020260306_16421938.jpg','020260306_16425616.jpg','020260306_16432063.jpg','020260306_16434084.jpg',
+  '020260306_16440732.jpg','020260306_16444086.jpg','020260306_16451950.jpg','020260306_16451950_1.jpg','020260306_16454703.jpg',
+  '020260306_16461636.jpg','020260306_16464097.jpg','020260306_16464097_L.jpg','020260306_16470285.jpg','020260306_16473991.jpg',
+  '020260306_16482027.jpg','020260306_16485036.jpg','020260306_16492526.jpg','020260306_16495072.jpg','020260306_16502011.jpg',
+  '020260306_16504895.jpg','020260306_16511430.jpg','020260306_16513934.jpg','020260306_16521246.jpg','020260306_16524747.jpg',
+  '020260306_16532277.jpg','020260306_16535093.jpg','020260306_16535093_1.jpg','020260306_16541362.jpg','020260306_16541362_1.jpg',
+  '020260306_16544122.jpg','020260306_16554148.jpg','020260306_16560471.jpg','020260306_16560471_1.jpg','020260306_16560471_2.jpg',
+  '020260306_16564216.jpg','020260306_16570431.jpg','020260306_16570431_1.jpg','020260306_16572884.jpg','020260306_16572884_1.jpg',
+  '020260306_16575513.jpg','020260306_16575513_1.jpg','020260306_16582436.jpg','020260306_16582436_1.jpg','020260306_16582436_2.jpg',
+  '020260306_16595234.jpg','020260306_17002735.jpg','020260306_17005738.jpg','020260306_17014435.jpg','020260306_17022994.jpg',
+  '020260306_17030753.jpg','020260306_17034938.jpg','020260306_17053846.jpg','020260306_17060768.jpg','020260306_17062725.jpg',
+  '020260306_17062725_1.jpg','020260306_17065270.jpg','020260306_17071927.jpg','020260306_17073875.jpg','020260306_17073875_1.jpg',
+  '020260306_17080220.jpg','020260306_17080220_1.jpg','020260306_17080220_2.jpg','020260306_17082483.jpg','020260306_17085262.jpg',
+  '020260306_17092610.jpg','020260306_17095882.jpg','020260306_17095882_1.jpg','020260306_17104227.jpg','020260306_17110649.jpg',
+  '020260306_17113193.jpg','020260306_17115267.jpg','020260306_17115267_1.jpg','020260306_17122448.jpg','020260306_17122448_1.jpg',
+  '020260306_17125712.jpg','020260306_17125712_1.jpg','020260306_17133019.jpg','020260306_17133019_1.jpg','020260306_17133019_2.jpg',
+  '020260306_17133019_3.jpg','020260306_17135347_1.jpg','020260306_17135347_2.jpg','020260306_17141317.jpg','020260306_17143659.jpg',
+  '020260306_17143659_1.jpg','020260306_17145898.jpg','020260306_17154221.jpg','020260306_17161296.jpg','020260306_17164035.jpg',
+  '020260306_17171356.jpg','020260306_17173595.jpg','020260306_17175402.jpg','020260306_17181049.jpg','020260306_17183405.jpg',
+  '020260306_17183405_1.jpg','020260306_17185340.jpg','020260306_17191432.jpg','020260306_17193567.jpg','020260306_17200158.jpg',
+  '020260306_17202023.jpg','020260306_17202023_1.jpg','020260306_17204002.jpg','020260306_17205896_1.jpg','020260306_17205896_2.jpg',
+  '020260306_17212144.jpg','020260306_17212144_1.jpg','020260306_17214490.jpg','020260306_17220970.jpg','020260306_17233092.jpg',
+  '020260306_17240442_1.jpg','020260306_17240442_2.jpg'
+];
+
+function buildMuralGrid() {
+  var html = '';
+  MURAL_SAMPLES.forEach(function(fn, i) {
+    html += '<div class="mural-cell" style="background-image:url(images/thumbnails/' + fn + ')" data-index="' + i + '"></div>';
+  });
+  muralGrid.innerHTML = html;
+}
+
+function revealMuralGrid(cb) {
+  muralGrid.classList.add('visible');
+  var cells = muralGrid.querySelectorAll('.mural-cell');
+  cells.forEach(function(cell, i) {
+    setTimeout(function() {
+      cell.classList.add('in');
+      if (i === cells.length - 1 && cb) setTimeout(cb, 400);
+    }, i * 22); // 117 cells × 22ms ≈ 2.6s
+  });
+  setTimeout(function() { atNum.classList.add('show'); }, 400);
+}
+
+// ============================================================
+// PARTICLES
+// ============================================================
+var particles = [];
+var clusterCenters = [];
+var animStartTime = 0;
+var animPlaying = false;
+var ANIM_TOTAL = 8000;
+
+function resize() {
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+}
+
+function updateClusterCenters() {
+  // Cluster centers = positions of the 6 card dots
+  var dots = animCards.querySelectorAll('.ac-dot');
+  clusterCenters = [];
+  dots.forEach(function(dot) {
+    var r = dot.getBoundingClientRect();
+    clusterCenters.push({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+  });
+}
+
+function generateParticles() {
+  particles = [];
+  var clusterKeys = ['white', 'yellow', 'red', 'black', 'green', 'blue'];
+  var weights = [0.347, 0.224, 0.205, 0.142, 0.047, 0.036];
+  var total = 117;
+  var counts = weights.map(function(w) { return Math.round(total * w); });
+  var sum = counts.reduce(function(a, b) { return a + b; }, 0);
+  if (sum !== total) counts[0] += total - sum;
+
+  for (var c = 0; c < 6; c++) {
+    var samples = E_SERIES[clusterKeys[c]];
+    for (var i = 0; i < counts[c]; i++) {
+      var baseHex = samples[i % samples.length];
+      var rgb = hexToRgb(baseHex);
+      var jit = 15;
+      var col = rgbToHex(
+        Math.max(0, Math.min(255, rgb.r + Math.floor(Math.random() * jit * 2 - jit))),
+        Math.max(0, Math.min(255, rgb.g + Math.floor(Math.random() * jit * 2 - jit))),
+        Math.max(0, Math.min(255, rgb.b + Math.floor(Math.random() * jit * 2 - jit)))
+      );
+      var srcCellIdx = Math.floor(Math.random() * MURAL_SAMPLES.length);
+      particles.push({
+        color: col,
+        cluster: c,
+        srcCell: srcCellIdx,
+        ox: (Math.random() - 0.5) * 50,
+        oy: (Math.random() - 0.5) * 50,
+        r: 2 + Math.random() * 4.5,
+        seed: Math.random() * Math.PI * 2,
+        floatOff: Math.random() * Math.PI * 2
+      });
+    }
+  }
+}
+
+// Cached cell rects
+var cachedCellRects = [];
+function updateCellRects() {
+  var cells = muralGrid.querySelectorAll('.mural-cell');
+  cachedCellRects = [];
+  cells.forEach(function(cell) {
+    var r = cell.getBoundingClientRect();
+    cachedCellRects.push({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+  });
+}
+
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+// ---- Draw ----
+function draw(now) {
+  ctx.clearRect(0, 0, W, H);
+
+  var elapsed = animPlaying ? (now - animStartTime) : 0;
+  var progress = Math.max(0, Math.min(1, elapsed / ANIM_TOTAL));
+
+  // Timeline:
+  // 0.00–0.10: murals visible, big "117"
+  // 0.10–0.25: particles emerge, murals fade
+  // 0.25–0.72: particles converge to 6 card positions
+  // 0.72–0.85: particles settle + glow
+  // 0.85–1.00: particles fade, cards visible
+
+  // Mural fade: start fading at 0.10, gone by 0.25
+  if (progress >= 0.10 && progress < 0.25) {
+    muralGrid.style.opacity = Math.max(0, 1 - (progress - 0.10) / 0.15);
+  } else if (progress >= 0.25) {
+    muralGrid.style.opacity = '0';
+  } else if (progress < 0.10) {
+    muralGrid.style.opacity = '';
+  }
+
+  var cellRects = cachedCellRects;
+  var pAlpha = 1;
+  if (progress < 0.10) pAlpha = 0;
+  else if (progress < 0.14) pAlpha = (progress - 0.10) / 0.04;
+  else if (progress > 0.85) pAlpha = Math.max(0, 1 - (progress - 0.85) / 0.15);
+
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    if (pAlpha <= 0) continue;
+
+    var cellRect = cellRects[p.srcCell] || { x: W / 2, y: H / 2 };
+    var sx = cellRect.x;
+    var sy = cellRect.y;
+
+    var cc = clusterCenters[p.cluster] || { x: W / 2, y: H * 0.88 };
+    var ex = cc.x + p.ox;
+    var ey = cc.y + p.oy;
+
+    var settle;
+    if (progress < 0.10) {
+      settle = 0;
+    } else if (progress < 0.25) {
+      var emergeP = (progress - 0.10) / 0.15;
+      settle = emergeP * 0.25;
+      sy -= emergeP * 50 * (0.5 + p.floatOff * 0.5);
+    } else if (progress < 0.72) {
+      var convP = (progress - 0.25) / 0.47;
+      settle = 0.25 + convP * 0.75;
+    } else {
+      settle = 1;
+    }
+
+    var es = easeInOutCubic(settle);
+    var x = sx + (ex - sx) * es;
+    var y = sy + (ey - sy) * es;
+
+    var arc = Math.sin(es * Math.PI) * 30;
+    x += Math.cos(p.seed) * arc;
+    y += Math.sin(p.seed) * arc * 0.55;
+
+    var alpha = pAlpha * (0.45 + 0.55 * es);
+
+    ctx.beginPath();
+    ctx.arc(x, y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = alpha;
+    ctx.fill();
+
+    if (es > 0.65) {
+      ctx.beginPath();
+      ctx.arc(x, y, p.r * 2, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = alpha * 0.06 * ((es - 0.65) / 0.35);
+      ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+
+  updateTextPhases(progress);
+
+  if (progress > 0.75 && !animCards.classList.contains('visible')) {
+    animCards.classList.add('visible');
+  } else if (progress < 0.75 && animCards.classList.contains('visible')) {
+    animCards.classList.remove('visible');
+  }
+
+  if (animPlaying) {
+    requestAnimationFrame(draw);
+  }
+}
+
+function updateTextPhases(progress) {
+  // "117" big number
+  if (progress < 0.08) {
+    atNum.classList.add('show');
+  } else if (progress < 0.12) {
+    atNum.style.opacity = Math.max(0, 1 - (progress - 0.08) / 0.04);
+  } else {
+    atNum.classList.remove('show');
+    atNum.style.opacity = '';
+  }
+
+  setPhase(atLine1, progress, 0.02, 0.28);
+  setPhase(atLine2, progress, 0.14, 0.42);
+  setPhase(atLine3, progress, 0.52, 0.80);
+
+  if (progress > 0.82) {
+    atLine4.classList.add('show');
+    setTimeout(function() { atLine5.classList.add('show'); }, 350);
+  } else {
+    atLine4.classList.remove('show');
+    atLine5.classList.remove('show');
+  }
+}
+
+function setPhase(el, progress, showStart, showEnd) {
+  if (progress >= showStart && progress < showEnd) {
+    el.classList.add('show');
+  } else {
+    el.classList.remove('show');
+  }
+}
+
+function buildResultCards() {
+  var html = '';
+  DUNHUANG_COLORS.forEach(function(c) {
+    html +=
+      '<div class="ac-card">' +
+        '<div class="ac-dot" style="background:' + c.eduHex + '"></div>' +
+        '<div class="ac-name">' + c.displayName + '</div>' +
+        '<div class="ac-pct">' + c.weight.toFixed(1) + '%</div>' +
+      '</div>';
+  });
+  animCards.innerHTML = html;
+}
+
+// ============================================================
+// ANIMATION CONTROL
+// ============================================================
+function startAnimation() {
+  if (animPlaying) return;
+  animPlaying = true;
+  updateCellRects();
+  updateClusterCenters();
+  animStartTime = performance.now();
+  requestAnimationFrame(draw);
+}
+
+// ============================================================
+// DETAIL SECTION — scroll reveal
+// ============================================================
+var detailObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      detailObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+function observeSteps() {
+  document.querySelectorAll('.step-item').forEach(function(el) {
+    detailObserver.observe(el);
+  });
+}
+
+// ============================================================
+// CLICK TO SCROLL
+// ============================================================
+atLine5.addEventListener('click', function() {
+  document.getElementById('detailWrap').scrollIntoView({ behavior: 'smooth' });
+});
+atLine5.style.cursor = 'pointer';
+atLine5.style.pointerEvents = 'auto';
+
+// ============================================================
+// INIT
+// ============================================================
+function initResearch() {
+  resize();
+  buildMuralGrid();
+  generateParticles();
+  buildResultCards();
+  observeSteps();
+
+  revealMuralGrid(function() {
+    setTimeout(startAnimation, 500);
+  });
+}
+
+window.addEventListener('resize', function() {
+  resize();
+  updateCellRects();
+  updateClusterCenters();
+});
+
+DHP.initLoader(function() {
+  setTimeout(initResearch, 300);
+});
+
+})();
+</script>
+</body>
+</html>
