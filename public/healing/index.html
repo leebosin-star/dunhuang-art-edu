@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>敦煌坛城 · 流沙色界</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0F0D0B;
+            font-family: "Noto Serif SC", "STSong", "SimSun", serif;
+            overflow: hidden;
+            height: 100vh;
+            cursor: auto;
+        }
+        body.hide-default-cursor {
+            cursor: none !important;
+        }
+        body.hide-default-cursor * {
+            cursor: none !important;
+        }
+
+        /* 进入页样式 */
+        #entry-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: #0F0D0B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease;
+            cursor: pointer;
+        }
+        #entry-loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .entry-dots {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 48px;
+        }
+        .entry-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #C9A084;
+            opacity: 0;
+            transform: scale(0);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+        .entry-title {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: rgba(249, 245, 235, 0.6);
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .entry-line {
+            width: 0;
+            height: 1px;
+            background: #C9A084;
+            margin: 28px auto 0;
+            opacity: 0;
+            transition: width 0.8s ease, opacity 0.6s ease;
+        }
+        .entry-hint {
+            margin-top: 40px;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: rgba(249, 245, 235, 0.25);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            background: none;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* 主内容 */
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-content.visible {
+            opacity: 1;
+        }
+        .mandala-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        #canvas-container {
+            display: block;
+            line-height: 0;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            border-radius: 4px;
+        }
+        canvas {
+            display: block;
+            width: 800px;
+            height: 800px;
+            border-radius: 4px;
+        }
+
+        /* 左右提示文字 */
+        .side-text {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 140px;
+            text-align: center;
+            color: rgba(232, 219, 188, 0.7);
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            line-height: 1.6;
+            text-shadow: 0 0 4px rgba(0,0,0,0.5);
+            pointer-events: none;
+            white-space: normal;
+            word-break: keep-all;
+            font-family: "SimSun", "宋体", serif;
+        }
+        .left-text { left: -200px; }
+        .right-text { right: -200px; }
+
+        /* 音乐图标 */
+        .sound-icon {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 200;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(210, 180, 140, 0.6);
+        }
+        .sound-icon:hover {
+            background: rgba(0,0,0,0.7);
+            transform: scale(1.05);
+        }
+        .sound-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        /* 金色光标 */
+        .golden-cursor {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background-color: #B89C62;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
+        }
+        .golden-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 24px;
+            height: 24px;
+            background: radial-gradient(circle, rgba(184,156,98,0.4) 0%, rgba(184,156,98,0) 80%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        @media (max-width: 1300px) {
+            .side-text { display: none; }
+        }
+        @media (max-width: 768px) {
+            .golden-cursor { display: none; }
+            body.hide-default-cursor { cursor: auto; }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+<body>
+
+<div id="entry-loader">
+    <div class="entry-dots"><span></span><span></span><span></span></div>
+    <div class="entry-title">敦煌坛城 · 流沙色界</div>
+    <div class="entry-line"></div>
+    <div class="entry-hint">✦ 点击任意处 或 按任意键 进入 ✦</div>
+</div>
+
+<div class="main-content" id="mainContent">
+    <div class="mandala-wrapper">
+        <div id="canvas-container"></div>
+        <div class="side-text left-text">移动鼠标<br>生成心灵图案</div>
+        <div class="side-text right-text">[空格键]<br>存至本地</div>
+    </div>
+    <div class="sound-icon" id="soundToggle">
+        <img id="musicIcon" src="assets/bell-off.png" alt="音乐开关">
+    </div>
+    <div class="golden-cursor" id="goldenCursor"></div>
+</div>
+
+<script>
+    // ========== 进入页逻辑 ==========
+    (function() {
+        const loader = document.getElementById('entry-loader');
+        const mainContent = document.getElementById('mainContent');
+        const dots = document.querySelectorAll('.entry-dots span');
+        const title = document.querySelector('.entry-title');
+        const line = document.querySelector('.entry-line');
+        const hint = document.querySelector('.entry-hint');
+
+        dots.forEach((dot, i) => {
+            setTimeout(() => {
+                dot.style.transform = 'scale(1)';
+                dot.style.opacity = '0.7';
+            }, 300 + i * 120);
+        });
+        setTimeout(() => { if (title) title.style.opacity = '1'; }, 1100);
+        setTimeout(() => { if (line) { line.style.width = '80px'; line.style.opacity = '0.4'; } }, 1500);
+        setTimeout(() => { if (hint) hint.style.opacity = '1'; }, 2000);
+
+        function dismissEntry() {
+            if (loader.classList.contains('fade-out')) return;
+            loader.classList.add('fade-out');
+            setTimeout(() => {
+                loader.style.display = 'none';
+                mainContent.classList.add('visible');
+                document.body.classList.add('hide-default-cursor');
+                const cursor = document.getElementById('goldenCursor');
+                if (cursor) cursor.style.opacity = '1';
+            }, 800);
+        }
+        loader.addEventListener('click', dismissEntry);
+        document.addEventListener('keydown', dismissEntry);
+    })();
+
+    // ========== 金色光标 ==========
+    const cursorDiv = document.getElementById('goldenCursor');
+    let mouseX = 0, mouseY = 0;
+    function updateCursorPosition() {
+        if (cursorDiv) {
+            cursorDiv.style.left = mouseX + 'px';
+            cursorDiv.style.top = mouseY + 'px';
+        }
+        requestAnimationFrame(updateCursorPosition);
+    }
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => { if (cursorDiv) cursorDiv.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { if (cursorDiv && document.body.classList.contains('hide-default-cursor')) cursorDiv.style.opacity = '1'; });
+    updateCursorPosition();
+
+    // ========== 敦煌坛城核心 ==========
+    const PALETTE = [
+        '#E7E4DA', '#CCBFA6', '#9C5C4A', '#2A2023', '#869B8D', '#687191',
+        '#4A6A7F', '#D4A373', '#C47B5E', '#6B7B6B', '#B8A99A', '#9E7B5E'
+    ];
+
+    let rawImagesA = [], rawImagesB = [];
+    let processedA = [], processedB = [];
+    let displayParticles = [];
+    let currentPointsA = [], currentColorMapA = new Map();
+    let currentPointsB = [], currentColorMapB = new Map();
+    let currentBgColor, targetBgColor;
+    let bgMusic = null;
+    let musicPlaying = false;
+    const musicIcon = document.getElementById('musicIcon');
+    const soundToggle = document.getElementById('soundToggle');
+    const ICON_OFF = 'assets/bell-off.png';
+    const ICON_ON = 'assets/bell-on.png';
+
+    let isMouseInsideCanvas = false;
+    let canvasMouseX = 0, canvasMouseY = 0;   // 相对于画布像素坐标 (0~800)
+
+    let globalWinX = 0;
+    window.addEventListener('mousemove', (e) => { globalWinX = e.clientX; });
+
+    function initMusic() {
+        bgMusic = new Audio('assets/background-music.mp3');
+        bgMusic.loop = true;
+        bgMusic.volume = 0.5;
+        bgMusic.muted = true;
+        bgMusic.load();
+        musicIcon.src = ICON_OFF;
+    }
+    function toggleMusic() {
+        if (!bgMusic) return;
+        if (musicPlaying) {
+            bgMusic.pause();
+            bgMusic.muted = true;
+            musicPlaying = false;
+            musicIcon.src = ICON_OFF;
+        } else {
+            bgMusic.muted = false;
+            bgMusic.play().then(() => {
+                musicPlaying = true;
+                musicIcon.src = ICON_ON;
+            }).catch(e => { console.log("播放失败", e); bgMusic.muted = true; });
+        }
+    }
+    if (soundToggle) soundToggle.addEventListener('click', toggleMusic);
+
+    function preload() {
+        for (let i = 1; i <= 7; i++) rawImagesA.push(loadImage(`assets/A${i}.png`));
+        for (let i = 1; i <= 6; i++) rawImagesB.push(loadImage(`assets/B${i}.png`));
+    }
+
+    function setup() {
+        let canvas = createCanvas(800, 800);
+        canvas.parent('canvas-container');
+        noCursor();
+
+        const canvasEl = document.querySelector('#canvas-container canvas');
+        if (canvasEl) {
+            canvasEl.addEventListener('mouseenter', () => { isMouseInsideCanvas = true; });
+            canvasEl.addEventListener('mouseleave', () => { isMouseInsideCanvas = false; });
+            // 关键修复：使用 offsetX/offsetY 直接获取相对于画布左上角的坐标
+            canvasEl.addEventListener('mousemove', (e) => {
+                let x = e.offsetX;
+                let y = e.offsetY;
+                // 边界保护
+                x = Math.min(Math.max(x, 0), canvasEl.width);
+                y = Math.min(Math.max(y, 0), canvasEl.height);
+                canvasMouseX = x;
+                canvasMouseY = y;
+            });
+        }
+
+        currentBgColor = color(PALETTE[3]);
+        targetBgColor = color(PALETTE[3]);
+
+        for (let i = 0; i < rawImagesA.length; i++) {
+            processedA.push(processImage(rawImagesA[i], { step: 2, maxPoints: 7000 }));
+        }
+        for (let i = 0; i < rawImagesB.length; i++) {
+            processedB.push(processImage(rawImagesB[i], { step: 2, maxPoints: 5500 }));
+        }
+
+        let totalParticles = 55000;
+        for (let i = 0; i < totalParticles; i++) {
+            displayParticles.push({
+                x: random(-width/2, width/2), y: random(-height/2, height/2),
+                vx: random(-1,1), vy: random(-1,1),
+                baseR: random(2.8,5.0),
+                noiseSeedX: random(0,1000), noiseSeedY: random(1000,2000),
+                currentCol: color(random(PALETTE)), targetCol: color(random(PALETTE)),
+                targetType: null
+            });
+        }
+        console.log("敦煌坛城启动，粒子数:" + displayParticles.length);
+        initMusic();
+    }
+
+    function draw() {
+        // 背景渐变
+        let bgT = map(globalWinX, 0, window.innerWidth, 0, 1);
+        targetBgColor = lerpColor(color(PALETTE[5]), color(PALETTE[3]), bgT);
+        currentBgColor = lerpColor(currentBgColor, targetBgColor, 0.02);
+        background(currentBgColor);
+
+        let allTargets = [];
+
+        if (isMouseInsideCanvas) {
+            // 使用正确的画布内坐标 (0~800)
+            let x = canvasMouseX;
+            let y = canvasMouseY;
+            // 映射 A 索引: X 0~800 → 0~6
+            let idxA = floor(map(x, 0, width, 0, 7));
+            idxA = constrain(idxA, 0, 6);
+            // 映射 B 索引: Y 0~800 → 0~5
+            let idxB = floor(map(y, 0, height, 0, 6));
+            idxB = constrain(idxB, 0, 5);
+
+            let dataA = processedA[idxA];
+            let dataB = processedB[idxB];
+
+            if (dataA && dataB) {
+                if (currentPointsA !== dataA.points) {
+                    currentPointsA = dataA.points;
+                    currentColorMapA = generateColorMapWithoutRepeat(dataA.uniqueLabels, []);
+                }
+                if (currentPointsB !== dataB.points) {
+                    currentPointsB = dataB.points;
+                    let usedColorsByA = new Set(currentColorMapA.values());
+                    currentColorMapB = generateColorMapWithoutRepeat(dataB.uniqueLabels, usedColorsByA);
+                }
+
+                let offsetB = 35;
+                for (let p of currentPointsB) {
+                    let col = currentColorMapB.get(p.label);
+                    if (!col) continue;
+                    allTargets.push({ x: p.baseY + offsetB, y: p.baseX, col: col, type: 'b' });
+                    allTargets.push({ x: -(p.baseY + offsetB), y: -p.baseX, col: col, type: 'b' });
+                    allTargets.push({ x: -p.baseX, y: p.baseY + offsetB, col: col, type: 'b' });
+                    allTargets.push({ x: p.baseX, y: -(p.baseY + offsetB), col: col, type: 'b' });
+                }
+                if (idxA === 6) {
+                    for (let p of currentPointsA) {
+                        let col = currentColorMapA.get(p.label);
+                        if (!col) continue;
+                        allTargets.push({ x: p.centerX, y: p.centerY, col: col, type: 'a' });
+                    }
+                } else {
+                    for (let p of currentPointsA) {
+                        let col = currentColorMapA.get(p.label);
+                        if (!col) continue;
+                        allTargets.push({ x: p.baseX, y: -p.baseY, col: col, type: 'a' });
+                        allTargets.push({ x: p.baseX, y: p.baseY, col: col, type: 'a' });
+                    }
+                }
+            }
+        }
+
+        push();
+        translate(width/2, height/2);
+        blendMode(BLEND);
+        let GLOBAL_SCALE = 0.8;
+        let ease, friction;
+        if (isMouseInsideCanvas && allTargets.length > 0) {
+            ease = 0.02; friction = 0.93;
+        } else {
+            ease = 0.0; friction = 0.98;
+        }
+
+        for (let i = 0; i < displayParticles.length; i++) {
+            let p = displayParticles[i];
+            p.currentCol = lerpColor(p.currentCol, p.targetCol, 0.1);
+            if (isMouseInsideCanvas && allTargets.length > 0) {
+                let target = allTargets[i % allTargets.length];
+                p.targetCol = target.col;
+                p.targetType = target.type;
+                let tx = target.x * GLOBAL_SCALE;
+                let ty = target.y * GLOBAL_SCALE;
+                let ax = (tx - p.x) * ease;
+                let ay = (ty - p.y) * ease;
+                p.vx = (p.vx + ax) * friction;
+                p.vy = (p.vy + ay) * friction;
+            } else {
+                p.vx = p.vx * friction;
+                p.vy = p.vy * friction;
+                p.vx += random(-0.25, 0.25);
+                p.vy += random(-0.25, 0.25);
+                let maxSpeed = 6;
+                p.vx = constrain(p.vx, -maxSpeed, maxSpeed);
+                p.vy = constrain(p.vy, -maxSpeed, maxSpeed);
+            }
+            p.x += p.vx;
+            p.y += p.vy;
+            let bound = 420;
+            if (p.x > bound) { p.x = bound - (p.x - bound); p.vx = -p.vx; }
+            if (p.x < -bound) { p.x = -bound + (-bound - p.x); p.vx = -p.vx; }
+            if (p.y > bound) { p.y = bound - (p.y - bound); p.vy = -p.vy; }
+            if (p.y < -bound) { p.y = -bound + (-bound - p.y); p.vy = -p.vy; }
+            p.noiseSeedX += 0.005;
+            p.noiseSeedY += 0.005;
+            p.x += map(noise(p.noiseSeedX), 0, 1, -0.12, 0.12);
+            p.y += map(noise(p.noiseSeedY), 0, 1, -0.12, 0.12);
+        }
+
+        if (isMouseInsideCanvas && allTargets.length > 0) {
+            for (let p of displayParticles) if (p.targetType === 'b') { fill(p.currentCol); noStroke(); ellipse(p.x, p.y, p.baseR * 1.6, p.baseR * 1.6); }
+            for (let p of displayParticles) if (p.targetType === 'a') { fill(p.currentCol); noStroke(); ellipse(p.x, p.y, p.baseR * 1.3, p.baseR * 1.3); }
+        } else {
+            for (let p of displayParticles) { fill(p.currentCol); noStroke(); ellipse(p.x, p.y, p.baseR, p.baseR); }
+        }
+        pop();
+    }
+
+    function keyPressed() {
+        if (key === ' ') {
+            let pg = createGraphics(width, height);
+            pg.image(get(), 0, 0, width, height);
+            pg.filter(BLUR, 15);
+            pg.loadPixels();
+            let noiseAmount = 0.06 * 255;
+            for (let i = 0; i < pg.pixels.length / 4; i++) {
+                let r = pg.pixels[i*4], g = pg.pixels[i*4+1], b = pg.pixels[i*4+2];
+                let delta = random(-noiseAmount, noiseAmount);
+                pg.pixels[i*4] = constrain(r+delta, 0, 255);
+                pg.pixels[i*4+1] = constrain(g+delta, 0, 255);
+                pg.pixels[i*4+2] = constrain(b+delta, 0, 255);
+            }
+            pg.updatePixels();
+            pg.save('Dunhuang_Blur_Noise.jpg');
+            console.log("保存成功");
+        }
+    }
+
+    // ========== 辅助函数（连通区域等，保持不变） ==========
+    function processImage(img, options={ step:3, maxPoints:3500 }) {
+        let step=options.step, maxPoints=options.maxPoints;
+        img.loadPixels();
+        const w=img.width, h=img.height, alphaThreshold=70;
+        let labels=Array(h).fill().map(()=>Array(w).fill(0));
+        let currentLabel=1;
+        let uf=new UnionFind(w*h);
+        for(let y=0;y<h;y++){
+            for(let x=0;x<w;x++){
+                let idx=(x+y*w)*4;
+                if(img.pixels[idx+3]<alphaThreshold) continue;
+                let left=(x>0&&labels[y][x-1]!==0)?labels[y][x-1]:0;
+                let up=(y>0&&labels[y-1][x]!==0)?labels[y-1][x]:0;
+                if(left===0&&up===0) labels[y][x]=currentLabel++;
+                else if(left!==0&&up===0) labels[y][x]=left;
+                else if(left===0&&up!==0) labels[y][x]=up;
+                else { let minL=Math.min(left,up), maxL=Math.max(left,up); labels[y][x]=minL; if(minL!==maxL) uf.union(minL,maxL); }
+            }
+        }
+        let finalLabelMap=Array(h).fill().map(()=>Array(w).fill(0));
+        let labelRemap=new Map();
+        let nextFinalLabel=1;
+        for(let y=0;y<h;y++){
+            for(let x=0;x<w;x++){
+                let l=labels[y][x];
+                if(l===0) continue;
+                let root=uf.find(l);
+                if(!labelRemap.has(root)) labelRemap.set(root,nextFinalLabel++);
+                finalLabelMap[y][x]=labelRemap.get(root);
+            }
+        }
+        let uniqueLabels=new Set();
+        for(let y=0;y<h;y++) for(let x=0;x<w;x++) if(finalLabelMap[y][x]!==0) uniqueLabels.add(finalLabelMap[y][x]);
+        let actualBottomY=0;
+        for(let y=h-1;y>=0;y--){ let found=false; for(let x=0;x<w;x++) if(finalLabelMap[y][x]!==0){ actualBottomY=y; found=true; break; } if(found) break; }
+        let hW=w/2, hH=h/2;
+        let points=[];
+        for(let y=0;y<h;y+=step) for(let x=0;x<w;x+=step){ let label=finalLabelMap[y][x]; if(label===0) continue; points.push({ centerX:x-hW, centerY:y-hH, baseX:x-hW, baseY:actualBottomY-y, label:label }); }
+        if(points.length>maxPoints){ shuffle(points,true); points=points.slice(0,maxPoints); }
+        return { points, uniqueLabels };
+    }
+    class UnionFind { constructor(n){ this.parent=Array(n); for(let i=0;i<n;i++) this.parent[i]=i; } find(x){ while(this.parent[x]!==x){ this.parent[x]=this.parent[this.parent[x]]; x=this.parent[x]; } return x; } union(a,b){ let ra=this.find(a), rb=this.find(b); if(ra!==rb) this.parent[rb]=ra; } }
+    function generateColorMapWithoutRepeat(labels, avoidColors=[]){
+        let avoidSet=new Set(avoidColors);
+        let availableColors=PALETTE.filter(c=>!avoidSet.has(color(c)));
+        if(availableColors.length===0) availableColors=[...PALETTE];
+        let shuffledColors=shuffleArray([...availableColors]);
+        let colorMap=new Map();
+        let labelArray=Array.from(labels);
+        for(let i=0;i<labelArray.length;i++) colorMap.set(labelArray[i], color(shuffledColors[i%shuffledColors.length]));
+        return colorMap;
+    }
+    function shuffleArray(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+</script>
+</body>
+</html>
