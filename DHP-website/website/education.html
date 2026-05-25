@@ -221,10 +221,25 @@ html { scroll-behavior:smooth; }
 
 /* ---- Responsive ---- */
 @media(max-width:768px){
+  .edu-hero-title { font-size:clamp(1.4rem,5vw,2rem); }
+  .edu-hero-sub { font-size:0.7rem; max-width:90vw; }
+  .edu-hero-content { padding:0 20px; }
+  .edu-hero-tags { gap:10px; }
+  .edu-hero-tag { font-size:0.52rem; padding:4px 10px; }
   .edu-section { padding:80px 20px; }
+  .edu-section-title { font-size:1.2rem; }
+  .edu-section-sub { font-size:0.64rem; margin-bottom:40px; max-width:90vw; }
   .edu-vision-grid { grid-template-columns:1fr; gap:12px; }
+  .edu-vision-card { padding:24px 20px; }
   .edu-overview { grid-template-columns:1fr; gap:12px; }
-  .edu-photo-grid { grid-template-columns:1fr; }
+  .edu-photo-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
+  .edu-photo-card .ph-info { padding:12px 14px; }
+  .edu-photo-card .ph-name { font-size:0.72rem; }
+  .edu-future-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
+  .edu-future-card { padding:28px 16px; }
+  .edu-downloads { padding-bottom:100px; }
+  .edu-future { padding-bottom:100px; }
+  .edu-footer { padding:40px 20px; }
 }
 </style>
 </head>

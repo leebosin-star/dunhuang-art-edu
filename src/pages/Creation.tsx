@@ -316,15 +316,15 @@ export default function Creation() {
       >
         返回
       </button>
-      <div className="h-full flex">
+      <div className="h-full flex flex-col lg:flex-row">
         {/* ====== 左侧：上传面板 ====== */}
-        <div className="w-[420px] flex-shrink-0 flex flex-col justify-center pl-20 pr-12">
+        <div className="w-full lg:w-[420px] flex-shrink-0 flex flex-col justify-center px-4 lg:pl-20 lg:pr-12">
           <div className="mb-10">
-            <p className="text-[#F9F5EB]/55 text-sm leading-relaxed mb-3">
-              上传一张你喜欢的图片，或从右侧敦煌图库中选择一幅作品
+            <p className="text-[#F9F5EB]/55 text-xs md:text-sm leading-relaxed mb-3">
+              上传一张你喜欢的图片，或从敦煌图库中选择一幅作品
             </p>
             <p className="text-[#F9F5EB]/30 text-xs leading-relaxed">
-              系统将自动分析图片中的主要颜色，提取出 5 种矿物色彩，用于生成敦煌风格纹样
+              系统将自动分析图片颜色，提取 5 种矿物色彩，用于生成敦煌纹样
             </p>
             <div className="flex items-center gap-3 mt-4 text-[#F9F5EB]/18 text-[10px]">
               <span>支持 PNG / JPG / WEBP</span>
@@ -351,13 +351,13 @@ export default function Creation() {
 
             <button
               onClick={() => fileRef.current?.click()}
-              className="group w-full flex flex-col items-center gap-3 py-10 rounded-2xl
+              className="group w-full flex flex-col items-center gap-3 py-6 lg:py-10 rounded-2xl
                 bg-[#F9F5EB]/3 hover:bg-[#F9F5EB]/6
                 transition-all duration-500 cursor-pointer
                 outline-dashed outline-1 outline-dunhuang-gold/15
                 hover:outline-dunhuang-jade/30"
             >
-              <div className="w-14 h-14 rounded-xl bg-dunhuang-jade/12 flex items-center justify-center
+              <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-dunhuang-jade/12 flex items-center justify-center
                 group-hover:scale-110 transition-transform duration-500">
                 <svg className="w-6 h-6 text-dunhuang-jade/60" fill="none" stroke="currentColor"
                   strokeWidth="1.5" viewBox="0 0 24 24">
@@ -393,7 +393,7 @@ export default function Creation() {
         </div>
 
         {/* ====== 右侧：3D 卡片展示区 ====== */}
-        <div className="flex-1 flex items-start justify-center pt-32">
+        <div className="flex-1 flex items-center lg:items-start justify-center pt-8 lg:pt-32">
           <PresetCarousel presets={presetLibrary} onSelect={selectPreset} />
         </div>
       </div>
@@ -420,11 +420,11 @@ function PresetCarousel({
     <div className="flex flex-col items-center gap-8">
       {/* === 3D 舞台 === */}
       <div
-        className="relative w-[600px] h-72 flex items-center justify-center"
+        className="relative w-full max-w-[600px] h-72 flex items-center justify-center"
         style={{ perspective: '1200px', overflow: 'visible' }}
       >
         <div
-          className="relative w-48 h-60"
+          className="relative w-36 h-48 md:w-48 md:h-60"
           style={{ transformStyle: 'preserve-3d', overflow: 'visible' }}
         >
           {presets.map((preset, i) => {
@@ -517,11 +517,11 @@ function PresetCarousel({
 
       <button
         onClick={() => onSelect(presets[active])}
-        className="px-10 py-3 rounded-2xl text-sm font-medium tracking-widest
+        className="px-6 py-2.5 lg:px-10 lg:py-3 rounded-2xl text-xs lg:text-sm font-medium tracking-widest
           bg-dunhuang-jade text-white hover:bg-dunhuang-blue
           transition-all duration-300 active:scale-[0.98]"
       >
-        使用此图开始创作
+        开始创作
       </button>
 
       <style>{`

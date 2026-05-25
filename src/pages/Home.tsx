@@ -19,12 +19,12 @@ const modules = [
 
 export default function Home() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-24">
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-24">
       <section className="text-center mb-20 animate-fade-in">
-        <h1 className="text-5xl mb-4 tracking-tight" style={{ color: '#5CC9C9' }}>
+        <h1 className="text-3xl md:text-5xl mb-4 tracking-tight" style={{ color: '#5CC9C9' }}>
           敦煌美育色彩
         </h1>
-        <p className="text-lg max-w-lg mx-auto leading-relaxed" style={{ color: 'rgba(92,201,201,0.5)' }}>
+        <p className="text-base md:text-lg max-w-lg mx-auto leading-relaxed" style={{ color: 'rgba(92,201,201,0.5)' }}>
           在数字世界中感知千年敦煌的矿物色彩，以算法为笔，以身体为墨。
         </p>
       </section>
@@ -34,11 +34,11 @@ export default function Home() {
           <Link
             key={path}
             to={path}
-            className={`no-underline dun-card p-10 group bg-gradient-to-br ${gradient}`}
+            className={`no-underline dun-card p-6 md:p-10 group bg-gradient-to-br ${gradient}`}
             style={{ animationDelay: `${i * 150}ms` }}
           >
             <div className="flex items-start gap-5">
-              <div className="w-14 h-14 rounded-dun bg-dunhuang-moon/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-500">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-dun bg-dunhuang-moon/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-500">
                 <svg
                   className="w-6 h-6 text-dunhuang-jade"
                   fill="none"
@@ -52,7 +52,7 @@ export default function Home() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-2xl text-dunhuang-azure mb-2">{title}</h2>
+                <h2 className="text-xl md:text-2xl text-dunhuang-azure mb-2">{title}</h2>
                 <p className="text-dunhuang-azure/60 leading-relaxed">{desc}</p>
               </div>
             </div>

@@ -143,6 +143,26 @@ export default function Interaction() {
   const [cameraFailed, setCameraFailed] = useState(false)
   const navigate = useNavigate()
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 1024
+  )
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024)
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  if (isMobile) {
+    return (
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh', background:'#0F0D0B', color:'#F9F5EB', textAlign:'center', padding:'40px 20px', fontFamily:'"Noto Serif SC",serif' }}>
+        <div>
+          <p style={{ fontSize:'1.5rem', marginBottom:'16px', color:'#D7B072' }}>请使用电脑打开实时互动体验</p>
+          <p style={{ fontSize:'0.9rem', opacity:0.5, lineHeight:1.8 }}>实时互动体验需要摄像头与较大的屏幕空间<br/>请使用桌面端浏览器访问本页面</p>
+        </div>
+      </div>
+    )
+  }
+
   const retryCamera = useCallback(async () => {
     setCameraFailed(false)
     setStatusText('正在启用摄像头...')

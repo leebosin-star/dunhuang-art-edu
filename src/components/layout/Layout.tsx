@@ -19,15 +19,15 @@ export default function Layout() {
       <DunhuangParticles />
       {!isImmersive && (
         <header className={`z-50 bg-[#0F0D0B]/90 backdrop-blur-md border-b border-dunhuang-gold/10 ${isFullScreen ? 'absolute top-0 left-0 right-0' : 'sticky top-0'}`}>
-          <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <nav className="max-w-6xl mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
             <Link
               to="/"
-              className="font-heading text-xl font-semibold text-dunhuang-gold tracking-wide no-underline"
+              className="font-heading text-lg md:text-xl font-semibold text-dunhuang-gold tracking-wide no-underline"
             >
               敦煌美育色彩
             </Link>
 
-            <ul className="flex items-center gap-1 list-none m-0 p-0">
+            <ul className="hidden sm:flex items-center gap-1 list-none m-0 p-0">
               {navItems.map(({ path, label }) => (
                 <li key={path}>
                   <Link

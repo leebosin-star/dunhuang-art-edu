@@ -191,8 +191,18 @@
             .side-text { display: none; }
         }
         @media (max-width: 768px) {
+            canvas { width: 100vw !important; height: 100vw !important; }
+            .mandala-wrapper { width: 100vw; }
+            .side-text { display: none; }
             .golden-cursor { display: none; }
             body.hide-default-cursor { cursor: auto; }
+            .sound-icon { top: 16px; right: 16px; width: 40px; height: 40px; }
+            .sound-icon img { width: 22px; height: 22px; }
+            .back-btn { top: 16px; left: 16px; padding: 6px 16px; font-size: 12px; }
+            .entry-title { font-size: 1.2rem; }
+            .entry-hint { font-size: 0.62rem; }
+            .entry-line { margin-top: 20px; }
+            .entry-dots { gap: 10px; margin-bottom: 36px; }
         }
     
         /* 返回按钮 */

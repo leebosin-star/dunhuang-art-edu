@@ -219,13 +219,31 @@ html { scroll-snap-type: none; background:#0F0D0B; }
    RESPONSIVE
    ============================================================ */
 @media(max-width:768px){
-  .mural-grid { grid-template-columns:repeat(9,1fr); width:96vw; gap:1px; }
+  .mural-grid { grid-template-columns:repeat(7,1fr); width:98vw; gap:1px; }
+  .anim-cards { flex-wrap:wrap; justify-content:center; bottom:24px; gap:4px; }
+  .ac-card { min-width:52px; padding:6px 4px; }
+  .ac-card .ac-dot { width:16px; height:16px; }
+  .ac-card .ac-name { font-size:0.6rem; }
+  .ac-card .ac-pct { font-size:0.7rem; }
+  .at-phase.p1 { font-size:clamp(1rem,4vw,1.5rem); }
+  .at-phase.p2 { font-size:clamp(0.75rem,2.5vw,1rem); }
+  .at-phase.p3 { font-size:clamp(0.9rem,3.5vw,1.4rem); }
+  .at-phase.p4 { font-size:clamp(1.4rem,7vw,3rem); }
+  .detail-wrap { padding:clamp(40px,7vh,80px) 0; }
+  .detail-inner { padding:0 20px; }
+  .detail-header { margin-bottom:clamp(36px,6vh,56px); }
+  .detail-header-title { font-size:1.3rem; }
+  .detail-header-desc { font-size:0.74rem; }
   .step-item { grid-template-columns:1fr; gap:16px; }
   .step-visual { flex-direction:row; }
   .step-num-ring { width:48px; height:48px; font-size:1.1rem; }
-  .anim-cards { flex-wrap:wrap; justify-content:center; bottom:28px; gap:5px; }
-  .ac-card { min-width:58px; padding:8px 5px; }
-  .ac-card .ac-dot { width:18px; height:18px; }
+  .step-name { font-size:1rem; }
+  .step-desc { font-size:0.76rem; }
+  .research-footer { padding:clamp(40px,8vh,80px) 20px; }
+  .footer-title { font-size:1rem; }
+  .footer-text { font-size:0.72rem; }
+  .footer-logos { gap:16px; }
+  .footer-logos span { font-size:0.68rem; }
 }
 </style>
 </head>

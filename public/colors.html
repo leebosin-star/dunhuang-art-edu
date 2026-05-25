@@ -287,18 +287,29 @@ html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
 @media (max-width: 768px) {
   .overview-strip { flex-wrap: wrap; }
   .overview-bar { flex: 0 0 33.333%; height: 50vh; }
-  .detail-section { padding: 100px 24px 60px; }
-  .detail-hero { grid-template-columns: 1fr; gap: 40px; }
+  .overview-bar-name { font-size: 1.1rem; }
+  .overview-bar-chapter { font-size: 0.65rem; }
+  .detail-section { padding: 80px 20px 60px; }
+  .detail-hero { grid-template-columns: 1fr; gap: 40px; margin-bottom: 60px; }
   .detail-swatch { aspect-ratio: 3/2; }
-  .pigment-grid { grid-template-columns: 1fr; }
+  .detail-info { text-align: center; }
+  .detail-name { font-size: 2rem; }
+  .detail-values { grid-template-columns: 1fr; gap: 4px 10px; }
+  .pigment-grid { grid-template-columns: 1fr; gap: 32px; }
   .aux-row { gap: 12px; }
   .aux-card { max-width: 160px; min-width: 80px; }
   .aux-card.aux-few { max-width: 220px; }
   .aux-card-block { height: 130px; }
   .aux-card.aux-few .aux-card-block { height: 160px; }
   .e-grid { grid-template-columns: repeat(5, 1fr); }
-  .mural-strip img { height: 180px; width: 240px; }
-  .back-top { bottom: 20px; right: 20px; }
+  .mural-strip { justify-content: flex-start; }
+  .mural-strip img { height: 150px; width: 200px; }
+  .detail-block { margin: 0 auto 56px; }
+  .detail-block-label { font-size: 0.6rem; }
+  .tool-banner { padding: 80px 24px; }
+  .tool-banner a { padding: 14px 32px; font-size: 0.78rem; }
+  .back-top { bottom: 20px; right: 20px; width: 34px; height: 34px; font-size: 0.85rem; }
+  .colors-footer { padding: 32px 20px; }
 }
 
 /* ---- Copy toast ---- */
