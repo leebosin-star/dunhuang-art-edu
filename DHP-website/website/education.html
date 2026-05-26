@@ -160,6 +160,30 @@ html { scroll-behavior:smooth; }
   font-size:0.6rem; color:rgba(249,245,235,0.18); letter-spacing:0.04em; line-height:1.6;
 }
 
+/* ---- 3D Model Viewer ---- */
+.edu-model { background:#0a0807; min-height:auto; padding-bottom:80px; }
+.edu-model-wrap {
+  max-width:900px; width:100%; margin:0 auto; position:relative;
+  border-radius:8px; overflow:hidden;
+  border:1px solid rgba(201,160,132,0.08);
+  background:rgba(10,8,7,0.8);
+  box-shadow:0 8px 48px rgba(0,0,0,0.5);
+}
+.edu-model-canvas { width:100%; height:60vh; display:block; cursor:grab; }
+.edu-model-canvas:active { cursor:grabbing; }
+.edu-model-hint {
+  position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+  font-size:0.55rem; color:rgba(201,189,164,0.2); letter-spacing:0.06em;
+  pointer-events:none; z-index:1;
+}
+.edu-model-loading {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  pointer-events:none; z-index:1;
+}
+.edu-model-loading span {
+  font-size:0.65rem; color:rgba(249,245,235,0.2); letter-spacing:0.08em;
+}
+
 /* ---- 4. Downloads ---- */
 .edu-downloads { background:#0a0807; min-height:auto; padding-bottom:160px; }
 .edu-dl-list {
@@ -221,25 +245,11 @@ html { scroll-behavior:smooth; }
 
 /* ---- Responsive ---- */
 @media(max-width:768px){
-  .edu-hero-title { font-size:clamp(1.4rem,5vw,2rem); }
-  .edu-hero-sub { font-size:0.7rem; max-width:90vw; }
-  .edu-hero-content { padding:0 20px; }
-  .edu-hero-tags { gap:10px; }
-  .edu-hero-tag { font-size:0.52rem; padding:4px 10px; }
   .edu-section { padding:80px 20px; }
-  .edu-section-title { font-size:1.2rem; }
-  .edu-section-sub { font-size:0.64rem; margin-bottom:40px; max-width:90vw; }
   .edu-vision-grid { grid-template-columns:1fr; gap:12px; }
-  .edu-vision-card { padding:24px 20px; }
   .edu-overview { grid-template-columns:1fr; gap:12px; }
-  .edu-photo-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
-  .edu-photo-card .ph-info { padding:12px 14px; }
-  .edu-photo-card .ph-name { font-size:0.72rem; }
-  .edu-future-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
-  .edu-future-card { padding:28px 16px; }
-  .edu-downloads { padding-bottom:100px; }
-  .edu-future { padding-bottom:100px; }
-  .edu-footer { padding:40px 20px; }
+  .edu-photo-grid { grid-template-columns:1fr; }
+  .edu-model-canvas { height:40vh; }
 }
 </style>
 </head>
@@ -258,7 +268,7 @@ html { scroll-behavior:smooth; }
 
 <!-- Navigation -->
 <nav class="nav" id="nav">
-  <a href="index.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
+  <a href="dhp.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
   <ul class="nav-links">
     <li><a href="colors.html">色彩系统</a></li>
     <li><a href="color-exploration.html">色彩探索</a></li>
@@ -343,10 +353,17 @@ html { scroll-behavior:smooth; }
   <!-- Photo grid -->
   <div class="edu-photo-grid">
     <div class="edu-photo-card">
-      <div class="ph-img-placeholder">&#127983;</div>
+      <img class="ph-img" src="assets/education/微信图片_2026-05-25_165433_349.png" alt="3D打印灯彩">
       <div class="ph-info">
-        <div class="ph-name">学生灯彩作品</div>
-        <div class="ph-note">将45窟角色图谱转化为灯面装饰，每盏灯都是一个孩子理解的敦煌</div>
+        <div class="ph-name">3D打印洞窟灯</div>
+        <div class="ph-note">学生课堂制作的灯彩实拍——敦煌色的立体再现</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/微信图片_2026-05-25_165442_080.png" alt="3D打印灯彩">
+      <div class="ph-info">
+        <div class="ph-name">3D打印洞窟灯</div>
+        <div class="ph-note">点亮后的洞窟灯——把45窟装进一盏会发光的灯</div>
       </div>
     </div>
     <div class="edu-photo-card">
@@ -378,17 +395,52 @@ html { scroll-behavior:smooth; }
       </div>
     </div>
     <div class="edu-photo-card">
-      <div class="ph-img-placeholder">&#127912;</div>
+      <img class="ph-img" src="assets/education/微信图片_2026-05-25_170206_164.jpg" alt="课堂现场">
       <div class="ph-info">
         <div class="ph-name">课堂教学现场</div>
         <div class="ph-note">PBL小组协作，每桌一个洞窟角色课题</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/微信图片_2026-05-25_170212_650.jpg" alt="课堂现场">
+      <div class="ph-info">
+        <div class="ph-name">课堂教学现场</div>
+        <div class="ph-note">孩子们在识色辨角色，讨论45窟的人物关系</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/微信图片_2026-05-25_170223_067.jpg" alt="课堂现场">
+      <div class="ph-info">
+        <div class="ph-name">课堂教学现场</div>
+        <div class="ph-note">灯彩制作环节——选角、定位、上色，每个孩子都在创作</div>
+      </div>
+    </div>
+    <div class="edu-photo-card">
+      <img class="ph-img" src="assets/education/微信图片_2026-05-25_170227_108.jpg" alt="课堂现场">
+      <div class="ph-info">
+        <div class="ph-name">课堂教学现场</div>
+        <div class="ph-note">课堂全景——研究生团队与三年级孩子们的敦煌色之旅</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ============================================================
-     S4 · 教案下载
+     S4 · 3D模型
+     ============================================================ -->
+<section class="edu-section edu-model" id="model3d">
+  <span class="edu-section-label">3D Model · 数字展品</span>
+  <h2 class="edu-section-title">洞窟灯 · 3D预览</h2>
+  <p class="edu-section-sub">学生课堂灯彩作品的数字化还原——可旋转、缩放、从任意角度观看</p>
+  <div class="edu-model-wrap" id="modelContainer">
+    <canvas class="edu-model-canvas" id="modelCanvas"></canvas>
+    <div class="edu-model-loading" id="modelLoading"><span>模型加载中...</span></div>
+    <div class="edu-model-hint">拖拽旋转 · 滚轮缩放 · 右键平移</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     S5 · 教案下载
      ============================================================ -->
 <section class="edu-section edu-downloads" id="downloads">
   <span class="edu-section-label">Resources · 教学资源</span>
@@ -431,7 +483,7 @@ html { scroll-behavior:smooth; }
 </section>
 
 <!-- ============================================================
-     S5 · 系列课程
+     S6 · 系列课程
      ============================================================ -->
 <section class="edu-section edu-future" id="future">
   <span class="edu-section-label">Coming Soon · 系列课程</span>
@@ -474,6 +526,116 @@ html { scroll-behavior:smooth; }
 DHP.initLoader(function() {
   document.getElementById('heroScroll').classList.add('in');
 });
+</script>
+
+<!-- Three.js 3D Viewer -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+var container = document.getElementById('modelContainer');
+var canvas = document.getElementById('modelCanvas');
+var loadingEl = document.getElementById('modelLoading');
+if (!container || !canvas) { /* section not present */ } else {
+
+var renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.9;
+
+var scene = new THREE.Scene();
+
+// Ambient + key light matching DHP warm tone
+scene.add(new THREE.AmbientLight(0x888888, 1.2));
+var key = new THREE.DirectionalLight(0xffeedd, 3);
+key.position.set(3, 5, 4);
+scene.add(key);
+var rim = new THREE.DirectionalLight(0xaaccff, 1.5);
+rim.position.set(-2, 1, -3);
+scene.add(rim);
+var fill = new THREE.DirectionalLight(0xccaa88, 1);
+fill.position.set(0, -1, 2);
+scene.add(fill);
+
+var camera = new THREE.PerspectiveCamera(45, 2, 0.01, 200);
+camera.position.set(3, 2, 5);
+camera.lookAt(0, 0, 0);
+
+var controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.6;
+controls.enableZoom = true;
+controls.zoomSpeed = 1.2;
+controls.minDistance = 0.15;
+controls.maxDistance = 40;
+controls.maxDistance = 12;
+controls.target.set(0, 0, 0);
+controls.update();
+
+// Prevent page scroll when zooming on the 3D model
+container.addEventListener('wheel', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+}, { passive: false });
+
+function resize() {
+  var rect = container.getBoundingClientRect();
+  var w = rect.width;
+  var h = Math.min(w * 0.75, window.innerHeight * 0.6);
+  renderer.setSize(w, h, false);
+  camera.aspect = w / Math.max(h, 1);
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+var loader = new GLTFLoader();
+loader.load('assets/education/洞窟灯.glb',
+  function(gltf) {
+    scene.add(gltf.scene);
+    if (loadingEl) loadingEl.style.display = 'none';
+    // Center model
+    var box = new THREE.Box3().setFromObject(gltf.scene);
+    var center = box.getCenter(new THREE.Vector3());
+    gltf.scene.position.set(-center.x, -center.y, -center.z);
+    var size = box.getSize(new THREE.Vector3());
+    var maxDim = Math.max(size.x, size.y, size.z);
+    camera.position.set(maxDim * 1.2, maxDim * 0.8, maxDim * 1.5);
+    controls.target.set(0, 0, 0);
+    controls.update();
+    resize();
+  },
+  function(progress) {
+    if (loadingEl && progress.total > 0) {
+      var pct = Math.round(progress.loaded / progress.total * 100);
+      loadingEl.innerHTML = '<span>加载中... ' + pct + '%</span>';
+    }
+  },
+  function(err) {
+    console.error('Model load error:', err);
+    if (loadingEl) loadingEl.innerHTML = '<span>模型加载失败</span>';
+  }
+);
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+}
 </script>
 </body>
 </html>
