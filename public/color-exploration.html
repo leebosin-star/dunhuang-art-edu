@@ -759,42 +759,15 @@ html { scroll-snap-type: y proximity; }
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
 @media(max-width:768px){
-  .tool-section { padding:80px 24px; }
-  .hero-cards { gap:6px; }
-  .hero-card { width:clamp(100px, 18vw, 150px); height:clamp(320px, 62vh, 480px); }
-  .hero-char { font-size:clamp(2rem, 6vw, 3.5rem); }
-  .scheme-layout { gap:24px; }
-  .scheme-picker { gap:12px; }
-  .scheme-color-btn { width:42px; height:42px; }
-  .scheme-color-btn .tooltip { display:none; }
-  .scheme-main-swatch { width:140px; height:140px; }
-  .scheme-tonal-row { gap:10px; }
-  .scheme-tonal-card { padding:10px 12px; }
-  .scheme-tonal-card .st-swatch { width:40px; height:40px; }
-  .scheme-pairings { flex-direction:column; align-items:center; }
-  .contrast-layout { grid-template-columns:1fr; gap:20px; }
-  .contrast-center { order:-1; }
-  .contrast-swatch { width:120px; height:120px; }
-  .contrast-center .contrast-swap-btn { transform:rotate(90deg); }
-  .extract-layout { flex-direction:column; gap:32px; }
-  .extract-upload-col { flex:0 0 auto; width:100%; }
-  .extract-zone { padding:32px 16px; }
-  .extract-sample { width:64px; height:44px; }
-  .match-input-area { flex-direction:column; gap:12px; }
-  .match-main { flex-direction:column; text-align:center; }
-  .match-tone-row { flex-direction:column; }
-  .match-top3-row { flex-direction:column; }
-  .match-palette-row { justify-content:center; }
-  .export-actions { flex-direction:column; align-items:center; }
-  .placeholder-card { padding:40px 24px; margin:0 16px; }
-  .realtime-card { padding:40px 24px; margin:0 16px; }
-  .basket-bar { flex-direction:column; gap:8px; padding:8px 20px; }
-  .back-top { bottom:80px; right:20px; }
-  .er-info { flex:0 0 100px; }
-}
-@media(max-width:768px){
-	.tool-section { padding:80px 16px; }
+	/* 全局 */
+	.tool-section { padding:80px 16px; min-height:auto; }
+	.tool-section-title { font-size:1.3rem; text-align:center; }
+	.tool-section-sub { font-size:0.7rem; margin-bottom:32px; text-align:center; }
+	.tool-guide { font-size:0.68rem; margin-bottom:20px; padding:0 8px; line-height:1.6; text-align:center; }
+	.tool-title-row { flex-wrap:wrap; justify-content:center; }
+	/* Hero */
 	.hero-cards { flex-direction:column; align-items:center; gap:16px; }
 	.hero-card { width:90vw; max-width:340px; height:auto; flex-direction:row; min-height:180px; }
 	.hero-card .card-mural { height:auto; width:35%; min-height:180px; flex-shrink:0; border-radius:0 6px 6px 0; }
@@ -804,31 +777,61 @@ html { scroll-snap-type: y proximity; }
 	.hero-char { font-size:clamp(2.5rem, 10vw, 4.5rem); }
 	.hero-subtitle { white-space:normal; font-size:0.65rem; max-width:90vw; top:58%; }
 	.hero-basket-hint { max-width:85vw; font-size:0.55rem; bottom:clamp(90px,14vh,130px); }
-	.tool-section-title { font-size:1.3rem; }
-	.tool-section-sub { font-size:0.7rem; margin-bottom:32px; }
-	.tool-guide { font-size:0.68rem; margin-bottom:20px; padding:0 8px; line-height:1.6; }
+	/* 主色搭配 */
+	.scheme-layout { gap:20px; }
+	.scheme-picker { gap:10px; flex-wrap:wrap; justify-content:center; }
+	.scheme-color-btn { width:38px; height:38px; }
+	.scheme-color-btn .tooltip { display:none; }
+	.scheme-main-swatch { width:120px; height:120px; }
 	.scheme-tonal-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 	.scheme-tonal-card { padding:10px 8px; }
 	.scheme-tonal-card .st-swatch { width:36px; height:36px; }
 	.scheme-pairing-card { max-width:100%; padding:12px 14px; }
+	.scheme-pairings { flex-direction:column; align-items:center; }
 	.sp-scenes { gap:4px; }
-	.realtime-card { padding:32px 16px; margin:0 8px; }
-	.realtime-btn { padding:12px 28px; font-size:0.8rem; }
-	.back-top { width:32px; height:32px; bottom:70px; right:12px; font-size:0.8rem; }
-	.tools-footer { padding:32px 16px; font-size:0.55rem; }
-	.tools-footer .footer-strip { width:100px; }
+	/* 文字可读性 */
+	.contrast-layout { grid-template-columns:1fr; gap:20px; }
+	.contrast-center { order:-1; }
+	.contrast-swatch { width:120px; height:120px; }
+	.contrast-center .contrast-swap-btn { transform:rotate(90deg); }
 	.contrast-preview-box { padding:24px 16px; }
 	.contrast-preview-large { font-size:1.2rem; }
 	.contrast-preview-small { font-size:0.68rem; }
 	.contrast-ratio-num { font-size:2.8rem; }
-	.export-btn { padding:10px 18px; font-size:0.7rem; }
-	.tool-help-popover { max-width:90vw; }
+	/* 从图片取色 */
+	.extract-layout { flex-direction:column; gap:24px; }
+	.extract-upload-col { flex:0 0 auto; width:100%; }
+	.extract-zone { padding:24px 16px; }
+	.extract-sample { width:56px; height:40px; }
+	/* 查找敦煌色 */
+	.match-layout { gap:16px; }
+	.match-input-area { flex-direction:column; gap:12px; }
 	.match-main { flex-direction:column; text-align:center; gap:14px; }
 	.match-main-swatch { width:60px; height:60px; }
 	.match-main-add { align-self:center; }
-	.tool-title-row { flex-wrap:wrap; justify-content:center; }
-}
-</style>
+	.match-tone-row { flex-direction:column; }
+	.match-top3-row { flex-direction:column; }
+	.match-palette-row { justify-content:center; }
+	/* 色票导出 */
+	.export-layout { padding:0 8px; }
+	.export-actions { flex-direction:column; align-items:center; }
+	.export-btn { padding:10px 18px; font-size:0.7rem; }
+	/* 实时互动 + 色彩疗愈 */
+	.realtime-card { padding:32px 16px; margin:0 8px; max-width:100%; }
+	.realtime-btn { padding:12px 28px; font-size:0.8rem; }
+	.realtime-icon { font-size:2.5rem; }
+	.realtime-title { font-size:1rem; }
+	.realtime-desc { font-size:0.7rem; }
+	/* 通用 */
+	.placeholder-card { padding:40px 24px; margin:0 16px; }
+	.basket-bar { flex-direction:column; gap:8px; padding:8px 20px; }
+	.basket-bar .basket-info { justify-content:center; }
+	.back-top { width:32px; height:32px; bottom:70px; right:12px; font-size:0.8rem; }
+	.tools-footer { padding:32px 16px; font-size:0.55rem; }
+	.tools-footer .footer-strip { width:100px; }
+	.tool-help-popover { max-width:90vw; left:5vw !important; }
+	.er-info { flex:0 0 auto; }
+}</style>
 </head>
 <body>
 
