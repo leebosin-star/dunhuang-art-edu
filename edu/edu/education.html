@@ -268,7 +268,7 @@ html { scroll-behavior:smooth; }
 
 <!-- Navigation -->
 <nav class="nav" id="nav">
-  <a href="index.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
+  <a href="dhp.html" class="nav-logo">DHP · 敦煌美育色彩系统</a>
   <ul class="nav-links">
     <li><a href="colors.html">色彩系统</a></li>
     <li><a href="color-exploration.html">色彩探索</a></li>
@@ -541,6 +541,10 @@ DHP.initLoader(function() {
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+
+var dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
 
 var container = document.getElementById('modelContainer');
 var canvas = document.getElementById('modelCanvas');
@@ -602,6 +606,7 @@ window.addEventListener('resize', resize);
 resize();
 
 var loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
 loader.load('assets/education/洞窟灯.glb',
   function(gltf) {
     scene.add(gltf.scene);

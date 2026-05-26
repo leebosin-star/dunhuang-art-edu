@@ -541,6 +541,10 @@ DHP.initLoader(function() {
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+
+var dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
 
 var container = document.getElementById('modelContainer');
 var canvas = document.getElementById('modelCanvas');
@@ -602,6 +606,7 @@ window.addEventListener('resize', resize);
 resize();
 
 var loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
 loader.load('assets/education/洞窟灯.glb',
   function(gltf) {
     scene.add(gltf.scene);
