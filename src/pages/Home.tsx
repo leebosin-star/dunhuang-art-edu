@@ -24,7 +24,7 @@ export default function Home() {
         <h1 className="text-3xl md:text-5xl mb-4 tracking-tight" style={{ color: '#5CC9C9' }}>
           敦煌美育色彩
         </h1>
-        <p className="text-base md:text-lg max-w-lg mx-auto leading-relaxed" style={{ color: 'rgba(92,201,201,0.5)' }}>
+        <p className="text-base md:text-lg mx-auto leading-relaxed whitespace-nowrap" style={{ color: 'rgba(92,201,201,0.5)' }}>
           在数字世界中感知千年敦煌的矿物色彩，以算法为笔，以身体为墨。
         </p>
       </section>

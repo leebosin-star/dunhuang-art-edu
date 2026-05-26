@@ -184,24 +184,24 @@ const E_SERIES = {
 // ============================================================
 const MURAL_IMAGES = {
   white: [
-    'chujiandunhuangshi/all/020260306_16444086.png'
+    'chujiandunhuangshi/all/020260306_16444086.webp'
   ],
   yellow: [
-    'chujiandunhuangshi/all/020260306_16402441.png'
+    'chujiandunhuangshi/all/020260306_16402441.webp'
   ],
   red: [
-    'chujiandunhuangshi/all/020260306_16432063.png'
+    'chujiandunhuangshi/all/020260306_16432063.webp'
   ],
   black: [
-    'chujiandunhuangshi/all/020260306_16383971.png',
-    'chujiandunhuangshi/all/020260306_16421938.png',
-    'chujiandunhuangshi/all/020260306_16425616.png'
+    'chujiandunhuangshi/all/020260306_16383971.webp',
+    'chujiandunhuangshi/all/020260306_16421938.webp',
+    'chujiandunhuangshi/all/020260306_16425616.webp'
   ],
   green: [
-    'chujiandunhuangshi/all/020260306_17125712.png'
+    'chujiandunhuangshi/all/020260306_17125712.webp'
   ],
   blue: [
-    'chujiandunhuangshi/all/020260306_16405385.png'
+    'chujiandunhuangshi/all/020260306_16405385.webp'
   ]
 };
 

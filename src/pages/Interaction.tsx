@@ -278,9 +278,11 @@ export default function Interaction() {
         pointsMeshRef.current = new THREE.Points(targetGeometry, shaderMaterial)
         scene.add(pointsMeshRef.current)
         pointsMesh = pointsMeshRef.current
-        setStatusText((prev) =>
-          prev.includes('摄像头') ? '系统就绪！请伸手互动' : '粒子就绪，正在开启摄像头...',
-        )
+        setStatusText((prev) => {
+          if (prev.includes('摄像头')) return '系统就绪！请伸手互动'
+          if (isWebcamReadyRef.current && handLandmarkerRef.current) return '系统就绪！请伸手互动'
+          return '粒子就绪，正在开启摄像头...'
+        })
       },
       (xhr) => {
         if (!mounted) return
