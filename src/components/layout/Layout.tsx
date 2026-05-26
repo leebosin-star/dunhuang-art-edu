@@ -9,7 +9,7 @@ const navItems = [
 ]
 
 const fullScreenPaths = ['/creation', '/interaction']
-const immersivePaths = ['/interaction'] // 完全沉浸，无导航
+const immersivePaths = ['/interaction', '/creation'] // 完全沉浸，无导航
 
 export default function Layout() {
   const { pathname } = useLocation()
@@ -32,7 +32,6 @@ export default function Layout() {
                 <Link to={path} className={pathname === path ? 'active' : ''}>{label}</Link>
               </li>
             ))}
-            {pathname === '/creation' && <li><Link to="/">返回</Link></li>}
             {pathname === '/' && <li><a href="/color-exploration.html#realtime">返回</a></li>}
           </ul>
         </header>

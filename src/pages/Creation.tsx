@@ -186,7 +186,6 @@ export default function Creation() {
   /* ==================== 创作阶段 ==================== */
 
   const canvasParams = useMemo(() => {
-    // 将选中的颜色排到色板第一位，作为主色
     const palette = extractedColors.length > 0 && color
       ? [color, ...extractedColors.filter(c => c !== color)]
       : extractedColors.length > 0
@@ -211,9 +210,9 @@ export default function Creation() {
   if (phase === 'creating') {
     return (
       <div className="absolute inset-0 bg-[#0F0D0B] overflow-hidden flex flex-col">
-        {/* 返回首页 */}
+        {/* 返回选图 */}
         <button
-          onClick={() => navigate('/')}
+          onClick={() => setPhase('idle')}
           className="absolute top-5 right-5 z-20 bg-[#151310]/90 px-4 py-2.5 rounded-xl backdrop-blur-sm border border-dunhuang-gold/10 text-[#F9F5EB]/30 text-sm cursor-pointer hover:bg-[#151310] hover:text-dunhuang-gold/70 hover:border-dunhuang-gold/25 transition-all duration-300"
         >
           返回
